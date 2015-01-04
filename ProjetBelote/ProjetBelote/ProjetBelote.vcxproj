@@ -64,12 +64,14 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="Hand.cpp" />
     <ClCompile Include="IA.cpp" />
+    <ClCompile Include="IAvDream.cpp" />
     <ClCompile Include="paquet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="carte.h" />
     <ClInclude Include="Hand.h" />
     <ClInclude Include="IA.h" />
+    <ClInclude Include="IAvDream.h" />
     <ClInclude Include="paquet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

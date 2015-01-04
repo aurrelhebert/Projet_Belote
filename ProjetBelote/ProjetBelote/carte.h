@@ -19,9 +19,11 @@ public :
 	Carte(int, int);
 	int getValue() const;
 	int getColor() const;
+	int getPoint() const;
 
 	void setAtout();
 	friend ostream & operator<<(ostream & str, Carte const & c);
+	friend bool operator==(const Carte& lhs, const Carte& rhs);
 };
 
 #endif

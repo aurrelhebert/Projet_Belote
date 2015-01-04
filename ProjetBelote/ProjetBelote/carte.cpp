@@ -3,9 +3,9 @@
 
 Carte::Carte()
 {
-	value = 0;
-	color = 0;
-	point = 0;
+	value = -1;
+	color = -1;
+	point = -1;
 	isAtout = false;
 }
 
@@ -61,11 +61,20 @@ int Carte::getColor() const
 	return color;
 }
 
+int Carte::getPoint() const
+{	
+	return point;
+}
 void Carte::setAtout()
 {
 	isAtout = true;
 	if(value == VALET) point = 20;
 	else if(value == NEUF) point = 14;
+}
+
+bool operator==(const Carte& lhs, const Carte& rhs) 
+{
+    return lhs.getValue() == rhs.getValue() && lhs.getColor() == rhs.getColor();
 }
 
 ostream& operator<<(ostream & str, Carte const & c)
