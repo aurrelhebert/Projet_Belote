@@ -11,6 +11,7 @@ class Carte{
 	int color;
 	int point;
 	bool isAtout;
+	int ordre;
 
 public : 
 	enum color_type {COEUR, PIQUE, CARREAU, TREFLE};
@@ -20,6 +21,7 @@ public :
 	int getValue() const;
 	int getColor() const;
 	int getPoint() const;
+	int getOrdre() const;
 
 	void setAtout();
 	friend ostream & operator<<(ostream & str, Carte const & c);

@@ -12,7 +12,7 @@ public:
 	int player;
 	Hand h;
 	int partner;
-
+	int nbFin;
 	int cpt;
 
 	struct state
@@ -35,6 +35,11 @@ public:
 	int minimax(state c);
 	int maxValue(state c);
 	int minValue(state c);
+	int minimaxAlphaBeta(int firstPlayer, int atout, Hand *);
+	int minimax(state c, int alpha, int beta);
+	int maxValue(state c, int alpha, int beta);
+	Carte nextCarte(Hand h, int atout, vector<Carte> cartesRestantes, int player, int numberCardPlayedInPli, Carte bestCard, int colorAsk, int valuePli);
+	int minValue(state c, int alpha, int beta);
 	state majState(state c, int i);
 	IAvDream(void);
 	~IAvDream(void);

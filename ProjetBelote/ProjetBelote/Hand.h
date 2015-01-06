@@ -30,6 +30,7 @@ public:
 	int posColor(int color);
 	bool hasColor(int c);
 	int Hand::nbColor(int c);
+	void triAtout(int color);
 
 private:
 	void triABulle(Carte tableau[], int longueur);

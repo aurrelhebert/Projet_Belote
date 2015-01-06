@@ -7,6 +7,7 @@ Carte::Carte()
 	color = -1;
 	point = -1;
 	isAtout = false;
+	ordre = -1;
 }
 
 Carte::Carte(int v, int c)
@@ -14,6 +15,7 @@ Carte::Carte(int v, int c)
 	value = v;
 	color = c;
 	isAtout = false;
+	ordre = v;
 	switch(v)
 	{
 	case SEPT:
@@ -55,6 +57,10 @@ int Carte::getValue() const
 	return value;
 }
 
+int Carte::getOrdre() const
+{	
+	return ordre;
+}
 
 int Carte::getColor() const
 {	
@@ -68,8 +74,16 @@ int Carte::getPoint() const
 void Carte::setAtout()
 {
 	isAtout = true;
-	if(value == VALET) point = 20;
-	else if(value == NEUF) point = 14;
+	if(value == VALET)
+	{
+			point = 20;
+			ordre = 10;
+	}
+	else if(value == NEUF) 
+	{
+			point = 14; 
+			ordre = 9;
+	}
 }
 
 bool operator==(const Carte& lhs, const Carte& rhs) 

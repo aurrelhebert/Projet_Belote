@@ -214,3 +214,27 @@ void Hand::triABulle(Carte tableau[], int longueur)
    }
    while(permutation);
 }
+
+void Hand::triAtout(int color)
+{
+   int i;
+   bool permutation;
+   int pos = posColor(color);
+   int longueur = pos + nbColor(color);
+   do
+   {
+      permutation = false;
+      for(i= pos; i<longueur; i++)
+      {
+		  if(listHand[i].getOrdre()<listHand[i+1].getOrdre())
+         {
+			Carte tmp = listHand[i];
+			listHand[i] = listHand[i+1];
+			listHand[i+1] = tmp;
+            permutation = true;
+         }
+      }
+      longueur--;
+   }
+   while(permutation);
+}

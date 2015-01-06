@@ -24,6 +24,7 @@ int main()  {
 		tas[i]= c;
 	}
 	Hand h = Hand(tas, sizeof(tas)/sizeof(Carte));
+	h.triAtout(Carte::PIQUE);
 	IA monIA = IA(h,p, Carte::CARREAU);	
 	for(int i = 0; i< 4; i++)
 	{
@@ -46,6 +47,7 @@ int main()  {
 		tas2[i]= c;
 	}
 	Hand h2 = Hand(tas2, sizeof(tas2)/sizeof(Carte));
+	h2.triAtout(Carte::PIQUE);
 	tabHand[1] = h2;
 
 	Carte tas3 [8];
@@ -55,6 +57,7 @@ int main()  {
 		tas3[i]= c;
 	}
 	Hand h3 = Hand(tas3, sizeof(tas3)/sizeof(Carte));
+	h3.triAtout(Carte::PIQUE);
 	tabHand[2] = h3;
 
 	Carte tas4 [8];
@@ -64,11 +67,12 @@ int main()  {
 		tas4[i]= c;
 	}
 	Hand h4 = Hand(tas4, sizeof(tas4)/sizeof(Carte));
+	h4.triAtout(Carte::PIQUE);
 	tabHand[3] = h4;
 
 
 
-	cout << monIADream.minimax(0, 1, tabHand) << endl;
+	//cout << monIADream.minimax(0, 1, tabHand) << endl;
 	
 	vector<Carte> cartesRestantes;
 
@@ -96,6 +100,7 @@ int main()  {
 			cartesRestantes.erase(cartesRestantes.begin() + posCarte);
 		}
 		tabHand[i] = Hand(newHand,8);
+		tabHand[i].triAtout(Carte::PIQUE);
 	}
 
 	for(int i = 0; i< 4; i++)
@@ -109,7 +114,11 @@ int main()  {
 		}
 	}
 	cout << "Total : " << point << endl;
-	cout << monIADream.minimax(0, 1, tabHand) << endl;
+	//cout << "Minimax : " << monIADream.minimax(0, 1, tabHand) << endl;
+	//cout << "Nb Coup : "<< monIADream.nbFin << endl;
+	
+	cout << "Alpha Beta : " << monIADream.minimaxAlphaBeta(0, 1, tabHand) << endl;
+	cout << "Nb Coup : "<< monIADream.nbFin << endl;
 	while(1);
 	return 0;
 }
