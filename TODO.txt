@@ -1,0 +1,6 @@
+Génération des mains Aléatoires,
+Répétition de l'algo,
+Mise en place du jeu,
+Test avec un Jeu incomplet au début,
+Gestion paquet restant,
+Y compris allHands (carte moindre).

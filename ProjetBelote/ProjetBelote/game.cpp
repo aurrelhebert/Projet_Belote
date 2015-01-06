@@ -119,6 +119,9 @@ int main()  {
 	
 	cout << "Alpha Beta : " << monIADream.minimaxAlphaBeta(0, 1, tabHand) << endl;
 	cout << "Nb Coup : "<< monIADream.nbFin << endl;
+
+	cout << "Retour de Carte : " << monIADream.nextCarte(tabHand, 1, cartesRestantes, 0, 0, Carte(), -1, 0);
+	cout << "Nb Coup : "<< monIADream.nbFin << endl;
 	while(1);
 	return 0;
 }

@@ -38,7 +38,7 @@ public:
 	int minimaxAlphaBeta(int firstPlayer, int atout, Hand *);
 	int minimax(state c, int alpha, int beta);
 	int maxValue(state c, int alpha, int beta);
-	Carte nextCarte(Hand h, int atout, vector<Carte> cartesRestantes, int player, int numberCardPlayedInPli, Carte bestCard, int colorAsk, int valuePli);
+	Carte nextCarte(Hand *, int atout, vector<Carte> cartesRestantes, int player, int numberCardPlayedInPli, Carte bestCard, int colorAsk, int valuePli);
 	int minValue(state c, int alpha, int beta);
 	state majState(state c, int i);
 	IAvDream(void);

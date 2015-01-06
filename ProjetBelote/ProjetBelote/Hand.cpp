@@ -220,7 +220,7 @@ void Hand::triAtout(int color)
    int i;
    bool permutation;
    int pos = posColor(color);
-   int longueur = pos + nbColor(color);
+   int longueur = (pos + nbColor(color) - 1);
    do
    {
       permutation = false;

@@ -265,7 +265,7 @@ int IAvDream::maxValue(state c, int alpha, int beta)
 		}
 		int value = - INT_MAX;
 
-		if(c.colorAsk == -1 && c.nbCarte < NBTOUR)
+		if(c.colorAsk == -1 && c.nbCarte > NBTOUR)
 		{
 			for(int i = 0; i < c.allHand[c.playerHasHand].nbCarte;i++)
 			{
@@ -348,7 +348,7 @@ int IAvDream::minValue(state c, int alpha, int beta)
 		}
 		int value = INT_MAX;
 
-		if(c.colorAsk == -1 && c.nbCarte < NBTOUR)
+		if(c.colorAsk == -1 && c.nbCarte > NBTOUR)
 		{
 			for(int i = 0; i < c.allHand[c.playerHasHand].nbCarte;i++)
 			{
@@ -467,47 +467,56 @@ IAvDream::state IAvDream::majState(state c, int i)
 	}
 
 
-Carte IAvDream::nextCarte(Hand h, int atout, vector<Carte> cartesRestantes, int player, int numberCardPlayedInPli, Carte bestCard, int colorAsk, int valuePli)
+Carte IAvDream::nextCarte(Hand * htab, int atout, vector<Carte> cartesRestantes, int playerActive, int numberCardPlayedInPli, Carte bestCard, int colorAsk, int valuePli)
 {
 	nbFin = 0;
-
-	state c;
-	c.playerWiningPli = player;
-	c.atout = atout;
-	c.nbCarte = h.nbCarte;
-	//TODO gestion Hand
-	/*for(int i=0;i<4;i++)
-		c.allHand[i] = all[i];*/
-
-	c.playerHasHand = player;
-	c.nbPlayerPli = numberCardPlayedInPli;
-	c.colorAsk = colorAsk;
-	c.BestCard = bestCard;
-
-	int tab[8];
-
+	h = htab[0]; //TODO A virer
+	int max = 0;
+	int index = 0;
 	for (int i=0; i<h.nbCarte;i++)
 	{
-		if (colorAsk = -1)
-		{
-			c.colorAsk = h.listHand[i].getColor();
-			c.BestCard = h.listHand[i];
-			c.valuePli = h.listHand[i].getPoint();
-		}
-		else 
-		{
-			c.valuePli = valuePli + h.listHand[i].getPoint();
-				//if(c.BestCard.getPoint() >
-		}
+		state c;
+		c.playerWiningPli = playerActive;
+		c.atout = atout;
+		c.nbCarte = h.nbCarte;
+	
+	//TODO gestion Hand To del
+		for(int i=0;i<4;i++)
+			c.allHand[i] = htab[i];
+
+		c.playerHasHand = playerActive;
+		c.nbPlayerPli = numberCardPlayedInPli;
+		c.colorAsk = colorAsk;
+		c.BestCard = bestCard;
+		c.valuePli = valuePli;
+	
 		c.score = 0;
-		if(c.playerHasHand == player ||c.playerHasHand == partner)
+		if (colorAsk = -1 || 
+			colorAsk == h.listHand[i].getColor()||
+			h.hasColor(colorAsk)==false && (h.listHand[i].getColor() == atout || h.hasColor(atout) == false))
 		{
-			tab[i] = maxValue(c,-INT_MAX, INT_MAX);
+			c = majState(c, i);
+			if(c.playerHasHand == player ||c.playerHasHand == partner)
+			{
+				int value = maxValue(c,-INT_MAX, INT_MAX);
+				if(value>max)
+				{
+					max = value;
+					index = i;
+				}
+			}
+			else 
+			{
+				int value = minValue(c,-INT_MAX, INT_MAX);
+				if(value>max)
+				{
+					max = value;
+					index = i;
+				}
+			}
 		}
-		else 
-		{
-			tab[i] = minValue(c,-INT_MAX, INT_MAX);
-		}
+		
 	}
-	return Carte();
+	cout << "Score : " << max << endl;
+	return h.listHand[index];
 }
