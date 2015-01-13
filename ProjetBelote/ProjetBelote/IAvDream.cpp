@@ -3,13 +3,24 @@
 #define NBTOUR 6
 
 
-IAvDream::IAvDream(void)
+IAvDream::IAvDream(int nb)
 {
 	player = 0;
 	partner = 2;
 	cpt = 0;
 	nbFin = 0;
 	srand(time(NULL));
+	nbTour = nb;
+	int pos = 0;
+	for(int i=0; i<4; i++)
+	{
+		for(int j=0; j<8; j++)
+		{
+			Carte c = Carte(j,i);
+			cardsStillInGame[pos++] = 1;
+		}
+	}
+	nbCardDeleted = 0;
 }
 
 
@@ -80,7 +91,7 @@ int IAvDream::maxValue(state c)
 		}
 		int value = - INT_MAX;
 
-		if(c.colorAsk == -1 && c.nbCarte > NBTOUR)
+		if(c.colorAsk == -1 && c.nbCarte > nbTour)
 		{
 			for(int i = 0; i < c.allHand[c.playerHasHand].nbCarte;i++)
 			{
@@ -151,7 +162,7 @@ int IAvDream::minValue(state c)
 		}
 		int value = INT_MAX;
 
-		if(c.colorAsk == -1 && c.nbCarte > NBTOUR)
+		if(c.colorAsk == -1 && c.nbCarte > nbTour)
 		{
 			for(int i = 0; i < c.allHand[c.playerHasHand].nbCarte;i++)
 			{
@@ -265,7 +276,7 @@ int IAvDream::maxValue(state c, int alpha, int beta)
 		}
 		int value = - INT_MAX;
 
-		if(c.colorAsk == -1 && c.nbCarte > NBTOUR)
+		if(c.colorAsk == -1 && c.nbCarte > nbTour)
 		{
 			for(int i = 0; i < c.allHand[c.playerHasHand].nbCarte;i++)
 			{
@@ -348,7 +359,7 @@ int IAvDream::minValue(state c, int alpha, int beta)
 		}
 		int value = INT_MAX;
 
-		if(c.colorAsk == -1 && c.nbCarte > NBTOUR)
+		if(c.colorAsk == -1 && c.nbCarte > nbTour)
 		{
 			for(int i = 0; i < c.allHand[c.playerHasHand].nbCarte;i++)
 			{
@@ -433,11 +444,11 @@ IAvDream::state IAvDream::majState(state c, int i)
 				c2.BestCard = c.allHand[c.playerHasHand].listHand[i];
 				c2.playerWiningPli = c.playerHasHand;
 			}
-			else if(c.atout == c.allHand[c.playerHasHand].listHand[i].getColor() &&
+			else if((c.atout == c.allHand[c.playerHasHand].listHand[i].getColor() &&
 				c.allHand[c.playerHasHand].listHand[i].getOrdre() > c.BestCard.getOrdre() &&
-				c.BestCard.getColor() == c.atout || 
+				c.BestCard.getColor() == c.atout )|| (
 				c.BestCard.getColor() != c.atout &&
-				c.atout == c.allHand[c.playerHasHand].listHand[i].getColor())
+				c.atout == c.allHand[c.playerHasHand].listHand[i].getColor()))
 			{
 				c2.BestCard = c.allHand[c.playerHasHand].listHand[i];
 				c2.playerWiningPli = c.playerHasHand;
@@ -467,14 +478,26 @@ IAvDream::state IAvDream::majState(state c, int i)
 	}
 
 
-Carte IAvDream::nextCarte(Hand * htab, int atout, vector<Carte> cartesRestantes, int playerActive, int numberCardPlayedInPli, Carte bestCard, int colorAsk, int valuePli)
+Carte IAvDream::nextCarte(Hand h, int atout, int playerActive, int numberCardPlayedInPli, Carte bestCard, int colorAsk, int valuePli)
 {
 	nbFin = 0;
-	h = htab[0]; //TODO A virer
+	Hand htab[4];
+
+	distributionCards(h, htab, atout);
+	//printGame(htab);
 	int max = 0;
 	int index = 0;
+	bool hasAtoutSup = false;
+	if(h.hasColor(atout))
+	{
+		if (h.listHand[h.posColor(atout)].getOrdre() > bestCard.getOrdre())
+		{
+			hasAtoutSup = true;
+		}
+	}
 	for (int i=0; i<h.nbCarte;i++)
 	{
+		
 		state c;
 		c.playerWiningPli = playerActive;
 		c.atout = atout;
@@ -482,8 +505,8 @@ Carte IAvDream::nextCarte(Hand * htab, int atout, vector<Carte> cartesRestantes,
 	
 	//TODO gestion Hand To del
 		for(int i=0;i<4;i++)
-			c.allHand[i] = htab[i];
-
+			c.allHand[(i+playerActive)%4] = htab[i];
+		
 		c.playerHasHand = playerActive;
 		c.nbPlayerPli = numberCardPlayedInPli;
 		c.colorAsk = colorAsk;
@@ -491,9 +514,12 @@ Carte IAvDream::nextCarte(Hand * htab, int atout, vector<Carte> cartesRestantes,
 		c.valuePli = valuePli;
 	
 		c.score = 0;
-		if (colorAsk = -1 || 
-			colorAsk == h.listHand[i].getColor()||
-			h.hasColor(colorAsk)==false && (h.listHand[i].getColor() == atout || h.hasColor(atout) == false))
+		if (colorAsk == -1 || 
+			colorAsk == h.listHand[i].getColor() && colorAsk != atout ||
+			bestCard.getColor() == atout && hasAtoutSup && h.listHand[i].getOrdre() > bestCard.getOrdre() && (h.hasColor(colorAsk) == false || colorAsk == atout)||
+			bestCard.getColor() == atout && h.listHand[i].getColor() == atout && !hasAtoutSup && (h.hasColor(colorAsk) == false || colorAsk == atout) ||
+			h.hasColor(colorAsk)==false && h.hasColor(atout) == false)
+		
 		{
 			c = majState(c, i);
 			if(c.playerHasHand == player ||c.playerHasHand == partner)
@@ -519,4 +545,77 @@ Carte IAvDream::nextCarte(Hand * htab, int atout, vector<Carte> cartesRestantes,
 	}
 	cout << "Score : " << max << endl;
 	return h.listHand[index];
+}
+
+void IAvDream::deleteCard(Carte c)
+{
+	int pos = c.getColor()*8 + c.getValue();
+	cardsStillInGame[pos] = 0;
+	nbCardDeleted++;
+}
+
+
+void IAvDream::distributionCards(Hand h, Hand htab[4], int atout)
+{
+	htab[0] = h;
+	int pos = 0;
+	vector<Carte> listeRestante;
+
+	for (int i=0; i<h.nbCarte;i++)
+	{
+		Carte tmp = h.listHand[i];
+		deleteCard(tmp);
+	}
+	
+	for(int i = 0; i < 4; i++)
+	{
+		for(int j = 0; j < 8; j++)
+		{
+			//int posCarte = rand() % 32 - nbCardDeleted;
+			if (cardsStillInGame[pos++] == 1)
+			{
+				Carte c(j,i);
+				listeRestante.push_back(c);
+			}
+		}
+	}
+
+	for(int i = 1; i < 4; i++)
+	{
+		Carte newHand[8];
+		for(int j = 0; j < h.nbCarte; j++)
+		{
+			int posCarte = rand() %listeRestante.size();
+			Carte tmp = listeRestante[posCarte];
+			if (tmp.getColor() == atout)
+			{	
+				tmp.setAtout();
+			}
+			newHand[j] = tmp;
+			listeRestante.erase(listeRestante.begin() + posCarte);
+		}
+		htab[i] = Hand(newHand,h.nbCarte);
+		htab[i].triAtout(atout);
+	}
+}
+
+
+
+void IAvDream::printGame(Hand htab[4]){
+	for(int i = 0; i< 4; i++)
+	{
+		cout << "Hand " << i << " --------------" << endl;
+		for(int j = 0; j< htab[i].nbCarte; j++)
+		{
+			cout << "Carte " << j << " : " << htab[i].listHand[j] << " " << htab[i].listHand[j].getPoint() << endl;
+		}
+	}
+}
+
+void IAvDream::delListCard(Carte cards[], int lg)
+{
+	for(int i=0; i <lg; i++)
+	{
+		deleteCard(cards[i]);
+	}
 }
