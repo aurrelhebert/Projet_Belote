@@ -2,6 +2,7 @@
 
 #define NBTOUR 6
 
+using namespace std;
 
 IAvDream::IAvDream(int nb)
 {
@@ -602,14 +603,24 @@ void IAvDream::distributionCards(Hand h, Hand htab[4], int atout)
 
 
 void IAvDream::printGame(Hand htab[4]){
-	for(int i = 0; i< 4; i++)
+	cout << setfill('-');
+	cout << setw(12) << " Hand 0 " << setw(6) << " + ";
+	cout << setw(12) << " Hand 1 " << setw(6) << " + ";
+	cout << setw(12) << " Hand 2 " << setw(6) << " + ";
+	cout << setw(12) << " Hand 3 " << setw(6) << " + " << endl;
+	cout << setfill(' ');
+
+	for(int j = 0; j< htab[0].nbCarte; j++)
 	{
-		cout << "Hand " << i << " --------------" << endl;
-		for(int j = 0; j< htab[i].nbCarte; j++)
-		{
-			cout << "Carte " << j << " : " << htab[i].listHand[j] << " " << htab[i].listHand[j].getPoint() << endl;
-		}
+		//cout << "Carte " << j << " : " << htab[i].listHand[j] << " " << htab[i].listHand[j].getPoint() << endl;
+		cout << j << " " << htab[0].listHand[j] << setw(3) << "| ";
+		cout << j << " " << htab[1].listHand[j] << setw(3) << "| ";
+		cout << j << " " << htab[2].listHand[j] << setw(3) << "| ";
+		cout << j << " " << htab[3].listHand[j] << setw(3) << "| " << endl;
 	}
+	cout << setfill('-');
+	cout << setw(71) << "" << endl;
+	cout << setfill(' ');
 }
 
 void IAvDream::delListCard(Carte cards[], int lg)
@@ -618,4 +629,35 @@ void IAvDream::delListCard(Carte cards[], int lg)
 	{
 		deleteCard(cards[i]);
 	}
+}
+
+
+bool IAvDream::isCarteValide(Hand h, Carte c, int colorAsk, int atout, Carte bestCard)
+{
+	bool valide = false;
+	if(colorAsk == -1)
+		valide = true;
+	else if(colorAsk != atout)
+	{
+		//Si carte est de la couleur demandée ou si main ne contient pas cette couleur ni de l'atout
+		if(c.getColor() == colorAsk || (h.hasColor(colorAsk) == false && h.hasColor(atout) == false))
+			valide = true;
+		//Si main ne contient pas couleur demandee, et ma carte est de l'atout
+		else if(h.hasColor(colorAsk) == false && c.getColor() == atout)
+			//Si bestCard n'est pas en atout ou si elle est d'ordre inférieur à la carte proposée
+			if(bestCard.getColor() != atout || c.getOrdre() > bestCard.getOrdre())
+				valide = true;
+		//Autres cas à false par défaut
+	}
+	else
+	{
+		//Si main ne contient pas d'atout
+		if(h.hasColor(colorAsk) == false)
+			valide = true;
+		//Si carte est de l'atout et de valeur supérieure à la bestCard
+		else if(c.getColor() == colorAsk && c.getOrdre() > bestCard.getOrdre())
+			valide = true;
+		//Autres cas à false par défaut
+	}
+	return valide;
 }

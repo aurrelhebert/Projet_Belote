@@ -1,6 +1,7 @@
 #include "carte.h"
 #include <string>
 
+
 Carte::Carte()
 {
 	value = -1;
@@ -93,50 +94,51 @@ bool operator==(const Carte& lhs, const Carte& rhs)
 
 ostream& operator<<(ostream & str, Carte const & c)
 {
-	str << "Carte : ";
+	str << setw(6) << left;
 	switch(c.getValue())
 	{
 	case Carte::SEPT:
 		{
-		str << "Sept ";
+		str << "Sept";
 		break;
 		}
 	case Carte::HUIT:
 		{
-		str << "Huit ";
+		str << "Huit";
 		break;
 		}
 	case Carte::NEUF:
 		{
-			str << "Neuf ";
+			str << "Neuf";
 		break;
 		}
 	case Carte::VALET:
 		{
-			str << "Valet ";
+			str << "Valet";
 		break;
 		}
 	case Carte::DAME:
 		{
-			str << "Dame ";
+			str << "Dame";
 		break;
 		}
 	case Carte::ROI:
 		{
-			str << "Roi ";
+			str << "Roi";
 		break;
 		}
 	case Carte::DIX:
 		{
-			str << "Dix ";
+			str << "Dix";
 		break;
 		}
 	case Carte::AS:
 		{
-			str << "As ";
+			str << "As";
 		break;
 		}
 	}
+	str << setw(8);
 	switch(c.getColor())
 	{
 	case Carte::COEUR:
@@ -146,19 +148,30 @@ ostream& operator<<(ostream & str, Carte const & c)
 		}
 	case Carte::PIQUE:
 		{
-		str << "Pique ";
+		str << "Pique";
 		break;
 		}
 	case Carte::CARREAU:
 		{
-			str << "Carreau ";
+			str << "Carreau";
 		break;
 		}
 	case Carte::TREFLE:
 		{
-			str << "Trefle ";
+			str << "Trefle";
 		break;
 		}
 	}
 	return str;
+}
+
+bool Carte::isSuperieur(Carte c)
+{
+	if(color == c.color) 
+		return ordre > c.ordre;
+	else if(isAtout && !c.isAtout) 
+		return true;
+	else 
+		return false;
+
 }

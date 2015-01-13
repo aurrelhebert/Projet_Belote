@@ -5,6 +5,8 @@
 #include <time.h>
 #include <stdio.h>
 #include <algorithm>
+#include <iostream>
+#include <fstream>
 
 /**
 * @class IAvDream
@@ -64,6 +66,7 @@ public:
 	void printGame(Hand htab[4]);
 
 	void delListCard(Carte c[], int lg);
+	bool isCarteValide(Hand h, Carte c, int colorAsk, int atout, Carte bestCard);
 
 	IAvDream(int nb);
 	~IAvDream(void);

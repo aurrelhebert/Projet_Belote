@@ -3,6 +3,7 @@
 #include <string.h>
 #include <Windows.h>
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -22,6 +23,8 @@ public :
 	int getColor() const;
 	int getPoint() const;
 	int getOrdre() const;
+
+	bool isSuperieur(Carte c);
 
 	void setAtout();
 	friend ostream & operator<<(ostream & str, Carte const & c);
