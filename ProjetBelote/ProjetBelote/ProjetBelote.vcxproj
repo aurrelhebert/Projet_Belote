@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="carte.h" />
+    <ClInclude Include="ConsoleColor.h" />
     <ClInclude Include="Hand.h" />
     <ClInclude Include="IA.h" />
     <ClInclude Include="IAvDream.h" />

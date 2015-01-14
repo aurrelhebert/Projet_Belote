@@ -238,3 +238,8 @@ void Hand::triAtout(int color)
    }
    while(permutation);
 }
+
+bool Hand::hasAtoutSup(int ordre, int atout){
+	int pos = posColor(atout);
+	return (listHand[pos].getOrdre() > ordre);
+}

@@ -67,6 +67,7 @@ public:
 
 	void delListCard(Carte c[], int lg);
 	bool isCarteValide(Hand h, Carte c, int colorAsk, int atout, Carte bestCard);
+	Carte carteAuto(Hand h,int colorAsk,int atout, Carte bestCard);
 
 	IAvDream(int nb);
 	~IAvDream(void);

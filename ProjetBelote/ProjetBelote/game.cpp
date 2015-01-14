@@ -7,65 +7,87 @@
 #include "Hand.h"
 #include "IA.h"
 #include "IAvDream.h"
+#include "ConsoleColor.h"
 
 using namespace std;
 
 
 void playGame(Hand htab[4],IAvDream monIA)
 {	
-	int player, nbCardPlayed, carteJoue, colorPlay, winner;
+	int player, nbCardPlayed, carteJoue, colorPlay, winner, scorePli, scoreA, scoreB;
+	cout << "Belote : nouveau jeu" << endl;
+	cout << "Choisir le joueur qui commence la partie (0 - 3) : ";
+	cin >> player;
 	int atout = 1;
+	scoreA = 0;
+	scoreB = 0;
 	Carte bCard;
 	for(int nbTour = 1; nbTour < 9; nbTour++)
 	{
-		cout << "Tour " << nbTour << endl;
+		cout << setfill('-');
+		cout << setw(71) << "" << endl;
+		cout << setfill(' ');
+		cout << ".... Tour " << nbTour << " ...." << endl;
 		monIA.printGame(htab);
-		cout << "choisir joueur" << endl;
-		cin >> player;
 		Carte c [4];
+		scorePli = 0;
 		bool valide;
 		
 		for (int i=0; i <4; i++)
 		{	
 			valide = false;
-			cout <<"--------Joueur " << player << ", i = " << i << endl;
+			if(i == 0 || i == 2) cout << blue <<".... Joueur " << player << ", (" << i+1 << "/4) ...." <<endl;
+			else cout << yellow <<".... Joueur " << player << ", (" << i+1 << "/4) ...." <<endl;
 			if (player == 0 && i == 0)
 			{
 				winner = player;
 				bCard = monIA.nextCarte(htab[player],atout,player,0,Carte(),-1,0,winner);
-				cout << bCard << endl;
+				cout << "La carte jouee est : " << bCard << endl;
+				scorePli += bCard.getPoint();
 				c[i] = bCard;
 				htab[player].deleteCarte(bCard);
 				colorPlay = bCard.getColor();
 			}
 			else if(i == 0)
 			{
-				cout << "Joue quoi ? " << endl;
+				cout << "Joue quoi ? ";
 				cin >> carteJoue;
-				bCard=htab[player].listHand[carteJoue];
 
-				valide = monIA.isCarteValide(htab[player],bCard,-1,atout,bCard);
-				while(!valide)
+				if(carteJoue < htab[player].nbCarte)
 				{
-					cout << "Carte non acceptee selon les regles du jeu ! " << endl;
-					cout << "Joue quoi ? " << endl;
-				cin >> carteJoue;
-				bCard=htab[player].listHand[carteJoue];
-				winner = player;
-				valide = monIA.isCarteValide(htab[player],bCard,-1,atout,bCard);
+					Carte tmp=htab[player].listHand[carteJoue];
+
+					valide = monIA.isCarteValide(htab[player],tmp,-1,atout,bCard);
+					while(!valide)
+					{
+						cout << "Carte non acceptee selon les regles du jeu ! " << endl;
+						cout << "Joue quoi ? ";
+						cin >> carteJoue;
+						tmp=htab[player].listHand[carteJoue];
+						winner = player;
+						valide = monIA.isCarteValide(htab[player],tmp,-1,atout,bCard);
+					}
+					bCard = tmp;
+				}
+				else
+				{
+					bCard = monIA.carteAuto(htab[player],-1,atout,bCard);
 				}
 
 				colorPlay = bCard.getColor();
-				cout << bCard << endl;
+				cout << "La carte jouee est : " << bCard << endl;
+				scorePli += bCard.getPoint();
 				c[i] = bCard;
 				htab[player].deleteCarte(bCard);
 			}
 			else if (player == 0)
 			{
 				Carte cardToPlay = monIA.nextCarte(htab[0],atout,player,i,bCard,colorPlay,0,winner);
-				cout << "Superieur " << cardToPlay << " ? " << endl;
+				cout << "La carte jouee est : " << cardToPlay << endl;
+				scorePli += cardToPlay.getPoint();
 				bool sup;
-				cin >> sup;
+				sup = cardToPlay.isSuperieur(bCard);
+				cout << cardToPlay << "est superieur a " << bCard << " ? => " << sup <<endl;
 				if (sup)
 				{
 					bCard=htab[player].listHand[carteJoue];
@@ -75,24 +97,34 @@ void playGame(Hand htab[4],IAvDream monIA)
 				htab[player].deleteCarte(cardToPlay);
 			}
 			else {
-				cout << "Joue quoi ? " << endl;
+				cout << "Joue quoi ? ";
 				cin >> carteJoue;
-				Carte tmp = htab[player].listHand[carteJoue];
+				Carte tmp;
 
-				valide = monIA.isCarteValide(htab[player],tmp,colorPlay,atout,bCard);
-				while(!valide)
+				if(carteJoue < htab[player].nbCarte)
 				{
-					cout << "Carte non acceptee selon les regles du jeu ! " << endl;
-					cout << "Joue quoi ? " << endl;
-				cin >> carteJoue;
-				tmp=htab[player].listHand[carteJoue];
+					tmp = htab[player].listHand[carteJoue];
 
-				valide = monIA.isCarteValide(htab[player],tmp,colorPlay,atout,bCard);
+					valide = monIA.isCarteValide(htab[player],tmp,colorPlay,atout,bCard);
+					while(!valide)
+					{
+						cout << "Carte non acceptee selon les regles du jeu ! " << endl;
+						cout << "Joue quoi ? ";
+						cin >> carteJoue;
+						tmp=htab[player].listHand[carteJoue];
+
+						valide = monIA.isCarteValide(htab[player],tmp,colorPlay,atout,bCard);
+					}
+				}
+				else
+				{
+					tmp = monIA.carteAuto(htab[player],colorPlay,atout,bCard);
 				}
 
+
+				cout << "La carte jouee est : " << tmp << endl;
+				scorePli += tmp.getPoint();
 				bool sup;
-				/*cout << tmp << "est superieur a " << bCard << " ? " <<endl;
-				cin >> sup;*/
 				sup = tmp.isSuperieur(bCard);
 				cout << tmp << "est superieur a " << bCard << " ? => " << sup <<endl;
 				if (sup)
@@ -107,8 +139,17 @@ void playGame(Hand htab[4],IAvDream monIA)
 		}
 		monIA.delListCard(c, 4);
 		monIA.nbTour--;
+		cout << white << "Le gagnant du pli est : Joueur " << winner << " - Score du pli : " << scorePli << endl;
+		if(winner == 0 || winner == 2) scoreA += scorePli;
+		else scoreB += scorePli;
+		player = winner;
 	}
-	cout << "Si vous lisez ce message, c'est que le jeu n'a pas planté :) " << endl;
+	cout << "La partie est terminee" << endl;
+	if(scoreA > scoreB)
+		cout << "Les gagnants sont les Joueurs 0 et 2, avec un score final de " << scoreA << " points" << endl;
+	else
+		cout << "Les gagnants sont les Joueurs 1 et 3, avec un score final de " << scoreB << " points" << endl;
+	cout << "Si vous lisez ce message, c'est que le jeu n'a pas plante :) " << endl;
 }
 
 

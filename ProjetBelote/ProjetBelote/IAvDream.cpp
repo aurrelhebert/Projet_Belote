@@ -606,19 +606,19 @@ void IAvDream::distributionCards(Hand h, Hand htab[4], int atout)
 
 void IAvDream::printGame(Hand htab[4]){
 	cout << setfill('-');
-	cout << setw(12) << " Hand 0 " << setw(6) << " + ";
-	cout << setw(12) << " Hand 1 " << setw(6) << " + ";
-	cout << setw(12) << " Hand 2 " << setw(6) << " + ";
-	cout << setw(12) << " Hand 3 " << setw(6) << " + " << endl;
+	cout << setw(13) << " Joueur 0 " << setw(5) << " + ";
+	cout << setw(13) << " Joueur 1 " << setw(5) << " + ";
+	cout << setw(13) << " Joueur 2 " << setw(5) << " + ";
+	cout << setw(13) << " Joueur 3 " << setw(5) << " + " << endl;
 	cout << setfill(' ');
 
 	for(int j = 0; j< htab[0].nbCarte; j++)
 	{
 		//cout << "Carte " << j << " : " << htab[i].listHand[j] << " " << htab[i].listHand[j].getPoint() << endl;
-		cout << j << " " << htab[0].listHand[j] << setw(3) << "| ";
-		cout << j << " " << htab[1].listHand[j] << setw(3) << "| ";
-		cout << j << " " << htab[2].listHand[j] << setw(3) << "| ";
-		cout << j << " " << htab[3].listHand[j] << setw(3) << "| " << endl;
+		cout << j << " " << htab[0].listHand[j] << setw(2) << "| ";
+		cout << j << " " << htab[1].listHand[j] << setw(2) << "| ";
+		cout << j << " " << htab[2].listHand[j] << setw(2) << "| ";
+		cout << j << " " << htab[3].listHand[j] << setw(2) << "| " << endl;
 	}
 	cout << setfill('-');
 	cout << setw(71) << "" << endl;
@@ -657,9 +657,20 @@ bool IAvDream::isCarteValide(Hand h, Carte c, int colorAsk, int atout, Carte bes
 		if(h.hasColor(colorAsk) == false)
 			valide = true;
 		//Si carte est de l'atout et de valeur supérieure à la bestCard
-		else if(c.getColor() == colorAsk && c.getOrdre() > bestCard.getOrdre())
+		else if(c.getColor() == colorAsk && (c.getOrdre() > bestCard.getOrdre() || h.hasAtoutSup(bestCard.getOrdre(), atout) == false))
 			valide = true;
 		//Autres cas à false par défaut
 	}
 	return valide;
+}
+
+Carte IAvDream::carteAuto(Hand h,int colorAsk,int atout, Carte bestCard)
+{
+	for(int i = 0; i < h.nbCarte; i++)
+	{
+		if(isCarteValide(h,h.listHand[i],colorAsk,atout,bestCard))
+		{
+			return h.listHand[i];
+		}
+	}
 }

@@ -67,9 +67,16 @@ public:
 	/**
 	Test a hand to know if it possessed a given color.
 	@param[in] c the color we want to know if it belong to the hand.
-	@return boolean yes iif this hand has the color
+	@return boolean yes if this hand has the color
 	*/
 	bool hasColor(int c);
+
+	/**
+	Test a hand to know if it possessed a better asset than the best one in game.
+	@param[in] ordre the order of the best asset in game.
+	@return boolean yes if this hand has a bette asset
+	*/
+	bool hasAtoutSup(int ordre, int atout);
 
 	/**
 	Getter used to get the number of card of a given color in the hand
