@@ -479,12 +479,14 @@ IAvDream::state IAvDream::majState(state c, int i)
 	}
 
 
-Carte IAvDream::nextCarte(Hand h, int atout, int playerActive, int numberCardPlayedInPli, Carte bestCard, int colorAsk, int valuePli)
+Carte IAvDream::nextCarte(Hand h, int atout, int playerActive, int numberCardPlayedInPli, Carte bestCard, int colorAsk, int valuePli, int playerWining)
 {
 	nbFin = 0;
 	Hand htab[4];
 
 	distributionCards(h, htab, atout);
+	player=playerWining;
+	partner=(playerWining+2)%4;
 	//printGame(htab);
 	int max = 0;
 	int index = 0;
@@ -500,7 +502,7 @@ Carte IAvDream::nextCarte(Hand h, int atout, int playerActive, int numberCardPla
 	{
 		
 		state c;
-		c.playerWiningPli = playerActive;
+		c.playerWiningPli = playerWining;
 		c.atout = atout;
 		c.nbCarte = h.nbCarte;
 	

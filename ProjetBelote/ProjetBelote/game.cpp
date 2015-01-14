@@ -13,7 +13,7 @@ using namespace std;
 
 void playGame(Hand htab[4],IAvDream monIA)
 {	
-	int player, nbCardPlayed, carteJoue, colorPlay;
+	int player, nbCardPlayed, carteJoue, colorPlay, winner;
 	int atout = 1;
 	Carte bCard;
 	for(int nbTour = 1; nbTour < 9; nbTour++)
@@ -31,7 +31,8 @@ void playGame(Hand htab[4],IAvDream monIA)
 			cout <<"--------Joueur " << player << ", i = " << i << endl;
 			if (player == 0 && i == 0)
 			{
-				bCard = monIA.nextCarte(htab[player],atout,player,0,Carte(),-1,0);
+				winner = player;
+				bCard = monIA.nextCarte(htab[player],atout,player,0,Carte(),-1,0,winner);
 				cout << bCard << endl;
 				c[i] = bCard;
 				htab[player].deleteCarte(bCard);
@@ -50,7 +51,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 					cout << "Joue quoi ? " << endl;
 				cin >> carteJoue;
 				bCard=htab[player].listHand[carteJoue];
-
+				winner = player;
 				valide = monIA.isCarteValide(htab[player],bCard,-1,atout,bCard);
 				}
 
@@ -61,13 +62,14 @@ void playGame(Hand htab[4],IAvDream monIA)
 			}
 			else if (player == 0)
 			{
-				Carte cardToPlay = monIA.nextCarte(htab[0],atout,player,i,bCard,colorPlay,0);
+				Carte cardToPlay = monIA.nextCarte(htab[0],atout,player,i,bCard,colorPlay,0,winner);
 				cout << "Superieur " << cardToPlay << " ? " << endl;
 				bool sup;
 				cin >> sup;
 				if (sup)
 				{
 					bCard=htab[player].listHand[carteJoue];
+					winner = player;
 				}
 				c[i]= cardToPlay;
 				htab[player].deleteCarte(cardToPlay);
@@ -96,6 +98,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 				if (sup)
 				{
 					bCard=htab[player].listHand[carteJoue];
+					winner = player;
 				}
 				c[i] = tmp;
 				htab[player].deleteCarte(tmp);
