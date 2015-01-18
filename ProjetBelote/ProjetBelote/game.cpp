@@ -24,6 +24,10 @@ void playGame(Hand htab[4],IAvDream monIA)
 	Carte bCard;
 	for(int nbTour = 1; nbTour < 9; nbTour++)
 	{
+		if (nbTour==5)
+		{
+			monIA.nbTour = 0;
+		}
 		cout << setfill('-');
 		cout << setw(71) << "" << endl;
 		cout << setfill(' ');
@@ -41,7 +45,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 			if (player == 0 && i == 0)
 			{
 				winner = player;
-				bCard = monIA.nextCarte(htab[player],atout,player,0,Carte(),-1,0,winner);
+				bCard = monIA.nextCarte(htab,atout,player,0,Carte(),-1,0,winner);
 				cout << "La carte jouee est : " << bCard << endl;
 				scorePli += bCard.getPoint();
 				c[i] = bCard;
@@ -64,10 +68,10 @@ void playGame(Hand htab[4],IAvDream monIA)
 						cout << "Joue quoi ? ";
 						cin >> carteJoue;
 						tmp=htab[player].listHand[carteJoue];
-						winner = player;
 						valide = monIA.isCarteValide(htab[player],tmp,-1,atout,bCard);
 					}
 					bCard = tmp;
+					winner = player;
 				}
 				else
 				{
@@ -82,7 +86,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 			}
 			else if (player == 0)
 			{
-				Carte cardToPlay = monIA.nextCarte(htab[0],atout,player,i,bCard,colorPlay,0,winner);
+				Carte cardToPlay = monIA.nextCarte(htab,atout,player,i,bCard,colorPlay,0,winner);
 				cout << "La carte jouee est : " << cardToPlay << endl;
 				scorePli += cardToPlay.getPoint();
 				bool sup;

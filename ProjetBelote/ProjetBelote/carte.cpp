@@ -168,10 +168,10 @@ ostream& operator<<(ostream & str, Carte const & c)
 bool Carte::isSuperieur(Carte c)
 {
 	if(color == c.color) 
-		return ordre > c.ordre;
+		return  ordre > c.ordre;
 	else if(isAtout && !c.isAtout) 
 		return true;
-	else 
+	else
 		return false;
 
 }

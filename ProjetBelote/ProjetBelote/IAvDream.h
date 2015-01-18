@@ -57,6 +57,7 @@ public:
 	int minimax(state c, int alpha, int beta);
 	int maxValue(state c, int alpha, int beta);
 	Carte nextCarte(Hand, int atout, int player, int numberCardPlayedInPli, Carte bestCard, int colorAsk, int valuePli, int playerWining);
+	Carte nextCarte(Hand*, int atout, int player, int numberCardPlayedInPli, Carte bestCard, int colorAsk, int valuePli, int playerWining);
 	int minValue(state c, int alpha, int beta);
 	state majState(state c, int i);
 
