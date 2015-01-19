@@ -94,7 +94,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 				cout << cardToPlay << "est superieur a " << bCard << " ? => " << sup <<endl;
 				if (sup)
 				{
-					bCard=htab[player].listHand[carteJoue];
+					bCard=cardToPlay;
 					winner = player;
 				}
 				c[i]= cardToPlay;

@@ -488,7 +488,7 @@ Carte IAvDream::nextCarte(Hand h, int atout, int playerActive, int numberCardPla
 	player=playerWining;
 	partner=(playerWining+2)%4;
 	//printGame(htab);
-	int max = 0;
+	int max = -1;
 	int index = 0;
 	bool hasAtoutSup = false;
 	if(h.hasColor(atout))
@@ -558,7 +558,7 @@ Carte IAvDream::nextCarte(Hand* htab, int atout, int playerActive, int numberCar
 	player=playerWining;
 	partner=(playerWining+2)%4;
 	//printGame(htab);
-	int max = 0;
+	int max = -1;
 	int index = 0;
 	bool hasAtoutSup = false;
 	if(h.hasColor(atout))
