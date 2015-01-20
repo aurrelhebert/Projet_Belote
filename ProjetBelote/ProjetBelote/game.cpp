@@ -51,13 +51,10 @@ void playGame(Hand htab[4],IAvDream monIA)
 #pragma omp parallel for
 				for (int iForIa = 0; iForIa <NBFORIA; iForIa++)
 				{
+					srand(iForIa);
 					tabIa[iForIa] = IAvDream(monIA.nbTour);
 					resIa[iForIa] = tabIa[iForIa].nextCarte(htab[player],atout,player,0,Carte(),-1,0,winner);
 					cout << iForIa << ": " << resIa[iForIa] << endl;
-				}
-				for (int iForIa = 0; iForIa <NBFORIA; iForIa++)
-				{
-					tabIa[iForIa].printGame(tabIa[iForIa].qqchose);
 				}
 				bCard = monIA.nextCarte(htab,atout,player,0,Carte(),-1,0,winner);
 				cout << "La carte jouee est : " << bCard << endl;

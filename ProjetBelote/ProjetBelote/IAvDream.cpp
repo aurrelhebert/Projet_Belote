@@ -680,10 +680,8 @@ void IAvDream::distributionCards(Hand h, Hand htab[4], int atout)
 	{
 		Carte newHand[8];
 		for(int j = 0; j < h.nbCarte; j++)
-		{
-			//uniform_int_distribution<int> distribution(0,listeRestante.size()-1);
-			int posCarte = intRand(0,listeRestante.size()-1, 2); 
-			//int posCarte = rand() %listeRestante.size();
+		{ 
+			int posCarte = rand() %listeRestante.size();
 			Carte tmp = listeRestante[posCarte];
 			if (tmp.getColor() == atout)
 			{	
@@ -694,10 +692,6 @@ void IAvDream::distributionCards(Hand h, Hand htab[4], int atout)
 		}
 		htab[i] = Hand(newHand,h.nbCarte);
 		htab[i].triAtout(atout);
-	}
-	for (int i=0;i<4;i++)
-	{
-		qqchose[i] = htab[i];
 	}
 }
 
