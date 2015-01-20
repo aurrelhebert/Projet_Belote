@@ -558,17 +558,14 @@ Carte IAvDream::nextCarte(Hand* htab, int atout, int playerActive, int numberCar
 	player=playerActive;
 	partner=(playerActive+2)%4;
 	
+	//cout << player << partner <<endl;
 	//printGame(htab);
 	int max = -1;
 	int index = 0;
 	bool hasAtoutSup = false;
-	if(h.hasColor(atout))
-	{
-		if (h.listHand[h.posColor(atout)].getOrdre() > bestCard.getOrdre())
-		{
-			hasAtoutSup = true;
-		}
-	}
+	if(h.hasAtoutSup(bestCard.getOrdre(),atout))
+		hasAtoutSup = true;
+	
 	for (int i=0; i<h.nbCarte;i++)
 	{
 		
@@ -588,12 +585,13 @@ Carte IAvDream::nextCarte(Hand* htab, int atout, int playerActive, int numberCar
 		c.valuePli = valuePli;
 	
 		c.score = 0;
-		if (colorAsk == -1 || 
+		/*if (colorAsk == -1 || 
 			colorAsk == h.listHand[i].getColor() && colorAsk != atout ||
 			bestCard.getColor() == atout && hasAtoutSup && h.listHand[i].getOrdre() > bestCard.getOrdre() && (h.hasColor(colorAsk) == false || colorAsk == atout)||
 			bestCard.getColor() == atout && h.listHand[i].getColor() == atout && !hasAtoutSup && (h.hasColor(colorAsk) == false || colorAsk == atout) ||
-			h.hasColor(colorAsk)==false && h.hasColor(atout) == false)
+			h.hasColor(colorAsk)==false && h.hasColor(atout) == false)*/
 		
+		if(isCarteValide(h, h.listHand[i], colorAsk, atout, bestCard))
 		{
 			c = majState(c, i);
 			if(c.playerHasHand == player ||c.playerHasHand == partner)
@@ -619,6 +617,7 @@ Carte IAvDream::nextCarte(Hand* htab, int atout, int playerActive, int numberCar
 		
 	}
 	cout << "Score : " << max << endl;
+	//cout << player << partner <<endl;
 	return h.listHand[index];
 }
 

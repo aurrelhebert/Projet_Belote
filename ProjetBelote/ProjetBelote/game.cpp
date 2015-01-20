@@ -87,6 +87,8 @@ void playGame(Hand htab[4],IAvDream monIA)
 			else if (player == 0)
 			{
 				Carte cardToPlay = monIA.nextCarte(htab,atout,player,i,bCard,colorPlay,0,winner);
+
+				//cout << "Part: " <<  monIA.partner << "play: " << monIA.partner << endl;
 				cout << "La carte jouee est : " << cardToPlay << endl;
 				scorePli += cardToPlay.getPoint();
 				bool sup;
