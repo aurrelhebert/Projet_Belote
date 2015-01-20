@@ -568,7 +568,7 @@ Carte IAvDream::nextCarte(Hand h, int atout, int playerActive, int numberCardPla
 		}
 		
 	}
-	cout << "Score : " << max << endl;
+	//cout << "Score : " << max << endl;
 	return h.listHand[index];
 }
 Carte IAvDream::nextCarte(Hand* htab, int atout, int playerActive, int numberCardPlayedInPli, Carte bestCard, int colorAsk, int valuePli, int playerWining)
@@ -638,7 +638,7 @@ Carte IAvDream::nextCarte(Hand* htab, int atout, int playerActive, int numberCar
 
 		
 	}
-	cout << "Score : " << max << endl;
+	//cout << "Score : " << max << endl;
 	//cout << player << partner <<endl;
 	return h.listHand[index];
 }

@@ -29,6 +29,8 @@ public :
 	void setAtout();
 	friend ostream & operator<<(ostream & str, Carte const & c);
 	friend bool operator==(const Carte& lhs, const Carte& rhs);
+
+	friend bool operator<(const Carte& lhs, const Carte& rhs);
 };
 
 #endif

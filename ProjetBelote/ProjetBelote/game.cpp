@@ -8,10 +8,11 @@
 #include "IA.h"
 #include "IAvDream.h"
 #include "ConsoleColor.h"
+#include <map>
 
 using namespace std;
 
-#define NBFORIA 5
+#define NBFORIA 20
 
 void playGame(Hand htab[4],IAvDream monIA)
 {	
@@ -54,9 +55,31 @@ void playGame(Hand htab[4],IAvDream monIA)
 					srand(iForIa);
 					tabIa[iForIa] = IAvDream(monIA.nbTour);
 					resIa[iForIa] = tabIa[iForIa].nextCarte(htab[player],atout,player,0,Carte(),-1,0,winner);
-					cout << iForIa << ": " << resIa[iForIa] << endl;
+					//cout << iForIa << ": " << resIa[iForIa] << endl;
 				}
-				bCard = monIA.nextCarte(htab,atout,player,0,Carte(),-1,0,winner);
+				map<Carte, int> m;
+				
+				for (int iForIa = 0; iForIa <NBFORIA; iForIa++)
+				{
+					Carte tmp = resIa[iForIa];
+					if(m.find(tmp).operator==(m.end()))
+					{
+						m[tmp]=0;
+					} 
+					m[tmp]++;
+				}
+				int max = -1;
+				Carte tmpForIa;
+				for (std::map<Carte, int>::iterator it = m.begin(); it != m.end(); ++it)
+				{
+					//cout << it->first << it->second <<endl;
+					if (it->second > max)
+					{
+						tmpForIa = it->first;
+						max = it->second;
+					}
+				}
+				bCard = tmpForIa;
 				cout << "La carte jouee est : " << bCard << endl;
 				scorePli += bCard.getPoint();
 				c[i] = bCard;
@@ -97,7 +120,40 @@ void playGame(Hand htab[4],IAvDream monIA)
 			}
 			else if (player == 0)
 			{
-				Carte cardToPlay = monIA.nextCarte(htab,atout,player,i,bCard,colorPlay,0,winner);
+				Carte resIa[NBFORIA];
+				IAvDream tabIa[NBFORIA];
+#pragma omp parallel for
+				for (int iForIa = 0; iForIa <NBFORIA; iForIa++)
+				{
+					srand(iForIa);
+					tabIa[iForIa] = IAvDream(monIA.nbTour);
+					resIa[iForIa] = tabIa[iForIa].nextCarte(htab,atout,player,i,bCard,colorPlay,0,winner);
+					//cout << iForIa << ": " << resIa[iForIa] << endl;
+				}
+				map<Carte, int> m;
+				
+				for (int iForIa = 0; iForIa <NBFORIA; iForIa++)
+				{
+					Carte tmp = resIa[iForIa];
+					if(m.find(tmp).operator==(m.end()))
+					{
+						m[tmp]=0;
+					} 
+					m[tmp]++;
+				}
+				int max = -1;
+				Carte tmpForIa;
+				for (std::map<Carte, int>::iterator it = m.begin(); it != m.end(); ++it)
+				{
+					//cout << it->first << it->second <<endl;
+					if (it->second > max)
+					{
+						tmpForIa = it->first;
+						max = it->second;
+					}
+				}
+				Carte cardToPlay = tmpForIa;
+				//Carte cardToPlay = monIA.nextCarte(htab,atout,player,i,bCard,colorPlay,0,winner);
 
 				//cout << "Part: " <<  monIA.partner << "play: " << monIA.partner << endl;
 				cout << "La carte jouee est : " << cardToPlay << endl;
@@ -173,7 +229,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 int main()  {
 	//cout << "Affichage test" << endl;
 	//cout << setw(6) << "Huit" << setw(6) << "Coeur" << endl;
-	//srand(time(NULL));
+	srand(time(NULL));
 
 	/*Paquet p = Paquet();
 	int point = 0;

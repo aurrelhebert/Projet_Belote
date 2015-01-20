@@ -92,6 +92,16 @@ bool operator==(const Carte& lhs, const Carte& rhs)
     return lhs.getValue() == rhs.getValue() && lhs.getColor() == rhs.getColor();
 }
 
+bool operator<(const Carte& lhs, const Carte& rhs)
+{
+    if(lhs.getColor() < rhs.getColor())
+		return true;
+	else if (lhs.getColor() == rhs.getColor() && lhs.getValue() < rhs.getValue())
+		return true;
+	else 
+		return false;
+}
+
 ostream& operator<<(ostream & str, Carte const & c)
 {
 	str << setw(6) << left;
