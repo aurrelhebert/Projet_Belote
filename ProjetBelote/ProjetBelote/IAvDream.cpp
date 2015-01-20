@@ -558,7 +558,6 @@ Carte IAvDream::nextCarte(Hand* htab, int atout, int playerActive, int numberCar
 	player=playerActive;
 	partner=(playerActive+2)%4;
 	
-	cout << player << partner <<endl;
 	//printGame(htab);
 	int max = -1;
 	int index = 0;
@@ -620,8 +619,6 @@ Carte IAvDream::nextCarte(Hand* htab, int atout, int playerActive, int numberCar
 		
 	}
 	cout << "Score : " << max << endl;
-	
-	cout << player << partner <<endl;
 	return h.listHand[index];
 }
 
