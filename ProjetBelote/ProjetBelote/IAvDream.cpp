@@ -1,8 +1,13 @@
 #include "IAvDream.h"
 
 #define NBTOUR 6
+#define NBMAX 5
 
 using namespace std;
+
+IAvDream::IAvDream()
+{
+}
 
 IAvDream::IAvDream(int nb)
 {
@@ -10,7 +15,7 @@ IAvDream::IAvDream(int nb)
 	partner = 2;
 	cpt = 0;
 	nbFin = 0;
-	srand(time(NULL));
+	//srand(time(NULL));
 	nbTour = nb;
 	int pos = 0;
 	for(int i=0; i<4; i++)
@@ -490,14 +495,11 @@ Carte IAvDream::nextCarte(Hand h, int atout, int playerActive, int numberCardPla
 	//printGame(htab);
 	int max = -1;
 	int index = 0;
-	bool hasAtoutSup = false;
-	if(h.hasColor(atout))
-	{
-		if (h.listHand[h.posColor(atout)].getOrdre() > bestCard.getOrdre())
-		{
-			hasAtoutSup = true;
-		}
-	}
+	int hasAtoutSup = false;
+	
+	if(h.hasAtoutSup(bestCard.getOrdre(),atout))
+		hasAtoutSup = true;
+	
 	for (int i=0; i<h.nbCarte;i++)
 	{
 		
@@ -517,16 +519,26 @@ Carte IAvDream::nextCarte(Hand h, int atout, int playerActive, int numberCardPla
 		c.valuePli = valuePli;
 	
 		c.score = 0;
-		if (colorAsk == -1 || 
+		/*if (colorAsk == -1 || 
 			colorAsk == h.listHand[i].getColor() && colorAsk != atout ||
 			bestCard.getColor() == atout && hasAtoutSup && h.listHand[i].getOrdre() > bestCard.getOrdre() && (h.hasColor(colorAsk) == false || colorAsk == atout)||
 			bestCard.getColor() == atout && h.listHand[i].getColor() == atout && !hasAtoutSup && (h.hasColor(colorAsk) == false || colorAsk == atout) ||
-			h.hasColor(colorAsk)==false && h.hasColor(atout) == false)
-		
+			h.hasColor(colorAsk)==false && h.hasColor(atout) == false)*/
+
+		if(isCarteValide(h, h.listHand[i], colorAsk, atout, bestCard))
 		{
 			c = majState(c, i);
 			if(c.playerHasHand == player ||c.playerHasHand == partner)
-			{
+			{/*
+				int resIa[NBMAX];
+				IAvDream tabIa[NBMAX];
+#pragma omp parallel for
+				for (int iForIa = 0; iForIa <NBMAX; iForIa++)
+				{
+					tabIa[iForIa] = IAvDream(nbTour);
+					resIa[iForIa] = tabIa[iForIa].maxValue(c,-INT_MAX, INT_MAX);
+					cout << iForIa << ": " << resIa[iForIa] << endl;
+				}*/
 				int value = maxValue(c,-INT_MAX, INT_MAX);
 				if(value>max)
 				{
@@ -536,6 +548,16 @@ Carte IAvDream::nextCarte(Hand h, int atout, int playerActive, int numberCardPla
 			}
 			else 
 			{
+				/*
+				int resIa[NBMAX];
+				IAvDream tabIa[NBMAX];
+#pragma omp parallel for
+				for (int iForIa = 0; iForIa <NBMAX; iForIa++)
+				{
+					tabIa[iForIa] = IAvDream(nbTour);
+					resIa[iForIa] = tabIa[iForIa].minValue(c,-INT_MAX, INT_MAX);
+					//cout << iForIa << ": " << resIa[iForIa] << endl;
+				}*/
 				int value = minValue(c,-INT_MAX, INT_MAX);
 				if(value>max)
 				{
@@ -653,13 +675,15 @@ void IAvDream::distributionCards(Hand h, Hand htab[4], int atout)
 			}
 		}
 	}
-
+	
 	for(int i = 1; i < 4; i++)
 	{
 		Carte newHand[8];
 		for(int j = 0; j < h.nbCarte; j++)
 		{
-			int posCarte = rand() %listeRestante.size();
+			//uniform_int_distribution<int> distribution(0,listeRestante.size()-1);
+			int posCarte = intRand(0,listeRestante.size()-1, 2); 
+			//int posCarte = rand() %listeRestante.size();
 			Carte tmp = listeRestante[posCarte];
 			if (tmp.getColor() == atout)
 			{	
@@ -671,7 +695,12 @@ void IAvDream::distributionCards(Hand h, Hand htab[4], int atout)
 		htab[i] = Hand(newHand,h.nbCarte);
 		htab[i].triAtout(atout);
 	}
+	for (int i=0;i<4;i++)
+	{
+		qqchose[i] = htab[i];
+	}
 }
+
 
 
 

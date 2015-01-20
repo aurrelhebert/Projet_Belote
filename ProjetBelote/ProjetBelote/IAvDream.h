@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
-
+#include <random>
 /**
 * @class IAvDream
 * @brief the rule the game will follow
@@ -26,6 +26,7 @@ public:
 	int cardsStillInGame[32];
 	int nbCardDeleted;
 	int nbTour;
+	Hand qqchose[4];
 
 	struct state //< the state that we will transmit and used inside the algo
 	{
@@ -41,6 +42,12 @@ public:
 		int valuePli; //< Value of this Pli
 		int score; //< the score of the game at this state
 	};
+
+	int intRand(const int & min, const int & max, int seed) {
+	   default_random_engine generator(seed);
+	   std::uniform_int_distribution<int> distribution(min,max);
+	   return distribution(generator);
+}
 
 	/**
 	Function used to launch and test the minimax algorithm. Here an initial state will be created.
@@ -69,7 +76,8 @@ public:
 	void delListCard(Carte c[], int lg);
 	bool isCarteValide(Hand h, Carte c, int colorAsk, int atout, Carte bestCard);
 	Carte carteAuto(Hand h,int colorAsk,int atout, Carte bestCard);
-
+	
+	IAvDream();
 	IAvDream(int nb);
 	~IAvDream(void);
 };

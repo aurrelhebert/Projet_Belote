@@ -11,6 +11,7 @@
 
 using namespace std;
 
+#define NBFORIA 5
 
 void playGame(Hand htab[4],IAvDream monIA)
 {	
@@ -24,7 +25,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 	Carte bCard;
 	for(int nbTour = 1; nbTour < 9; nbTour++)
 	{
-		if (nbTour==5)
+		if (nbTour==3)
 		{
 			monIA.nbTour = 0;
 		}
@@ -45,6 +46,19 @@ void playGame(Hand htab[4],IAvDream monIA)
 			if (player == 0 && i == 0)
 			{
 				winner = player;
+				Carte resIa[NBFORIA];
+				IAvDream tabIa[NBFORIA];
+#pragma omp parallel for
+				for (int iForIa = 0; iForIa <NBFORIA; iForIa++)
+				{
+					tabIa[iForIa] = IAvDream(monIA.nbTour);
+					resIa[iForIa] = tabIa[iForIa].nextCarte(htab[player],atout,player,0,Carte(),-1,0,winner);
+					cout << iForIa << ": " << resIa[iForIa] << endl;
+				}
+				for (int iForIa = 0; iForIa <NBFORIA; iForIa++)
+				{
+					tabIa[iForIa].printGame(tabIa[iForIa].qqchose);
+				}
 				bCard = monIA.nextCarte(htab,atout,player,0,Carte(),-1,0,winner);
 				cout << "La carte jouee est : " << bCard << endl;
 				scorePli += bCard.getPoint();
@@ -162,7 +176,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 int main()  {
 	//cout << "Affichage test" << endl;
 	//cout << setw(6) << "Huit" << setw(6) << "Coeur" << endl;
-	srand(time(NULL));
+	//srand(time(NULL));
 
 	/*Paquet p = Paquet();
 	int point = 0;
