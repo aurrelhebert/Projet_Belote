@@ -17,6 +17,7 @@ using namespace std;
 void playGame(Hand htab[4],IAvDream monIA)
 {	
 	int player, nbCardPlayed, carteJoue, colorPlay, winner, scorePli, scoreA, scoreB;
+	winner = -1;
 	cout << "Belote : nouveau jeu" << endl;
 	cout << "Choisir le joueur qui commence la partie (0 - 3) : ";
 	cin >> player;
@@ -95,21 +96,21 @@ void playGame(Hand htab[4],IAvDream monIA)
 				{
 					Carte tmp=htab[player].listHand[carteJoue];
 
-					valide = monIA.isCarteValide(htab[player],tmp,-1,atout,bCard);
+					valide = monIA.isCarteValide(htab[player],tmp,-1,atout,bCard,winner,player);
 					while(!valide)
 					{
 						cout << "Carte non acceptee selon les regles du jeu ! " << endl;
 						cout << "Joue quoi ? ";
 						cin >> carteJoue;
 						tmp=htab[player].listHand[carteJoue];
-						valide = monIA.isCarteValide(htab[player],tmp,-1,atout,bCard);
+						valide = monIA.isCarteValide(htab[player],tmp,-1,atout,bCard,winner,player);
 					}
 					bCard = tmp;
 					winner = player;
 				}
 				else
 				{
-					bCard = monIA.carteAuto(htab[player],-1,atout,bCard);
+					bCard = monIA.carteAuto(htab[player],-1,atout,bCard,winner,player);
 				}
 
 				colorPlay = bCard.getColor();
@@ -142,17 +143,17 @@ void playGame(Hand htab[4],IAvDream monIA)
 					m[tmp]++;
 				}
 				int max = -1;
-				Carte tmpForIa;
+				Carte cardToPlay;
 				for (std::map<Carte, int>::iterator it = m.begin(); it != m.end(); ++it)
 				{
 					//cout << it->first << it->second <<endl;
 					if (it->second > max)
 					{
-						tmpForIa = it->first;
+						cardToPlay = it->first;
 						max = it->second;
 					}
 				}
-				Carte cardToPlay = tmpForIa;
+
 				//Carte cardToPlay = monIA.nextCarte(htab,atout,player,i,bCard,colorPlay,0,winner);
 
 				//cout << "Part: " <<  monIA.partner << "play: " << monIA.partner << endl;
@@ -178,7 +179,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 				{
 					tmp = htab[player].listHand[carteJoue];
 
-					valide = monIA.isCarteValide(htab[player],tmp,colorPlay,atout,bCard);
+					valide = monIA.isCarteValide(htab[player],tmp,colorPlay,atout,bCard,winner,player);
 					while(!valide)
 					{
 						cout << "Carte non acceptee selon les regles du jeu ! " << endl;
@@ -186,12 +187,12 @@ void playGame(Hand htab[4],IAvDream monIA)
 						cin >> carteJoue;
 						tmp=htab[player].listHand[carteJoue];
 
-						valide = monIA.isCarteValide(htab[player],tmp,colorPlay,atout,bCard);
+						valide = monIA.isCarteValide(htab[player],tmp,colorPlay,atout,bCard,winner,player);
 					}
 				}
 				else
 				{
-					tmp = monIA.carteAuto(htab[player],colorPlay,atout,bCard);
+					tmp = monIA.carteAuto(htab[player],colorPlay,atout,bCard,winner,player);
 				}
 
 
@@ -211,10 +212,15 @@ void playGame(Hand htab[4],IAvDream monIA)
 			player = (player +1)%4;
 		}
 		monIA.delListCard(c, 4);
-		monIA.nbTour--;
+		if(nbTour < 4) 
+			monIA.nbTour--;
+		if(nbTour == 8) 
+			scorePli +=10;
 		cout << white << "Le gagnant du pli est : Joueur " << winner << " - Score du pli : " << scorePli << endl;
-		if(winner == 0 || winner == 2) scoreA += scorePli;
-		else scoreB += scorePli;
+		if(winner == 0 || winner == 2) 
+			scoreA += scorePli;
+		else 
+			scoreB += scorePli;
 		player = winner;
 	}
 	cout << "La partie est terminee" << endl;

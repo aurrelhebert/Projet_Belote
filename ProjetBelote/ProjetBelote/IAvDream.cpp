@@ -271,6 +271,8 @@ int IAvDream::maxValue(state c, int alpha, int beta)
 			if (c.playerWiningPli == player || c.playerWiningPli == partner) 
 			{	
 				c.score += c.valuePli;
+				if(c.nbCarte == 1)
+					c.score += 10;
 				c.nbCarte--;
 				return minimax(c,alpha,beta);
 			}
@@ -354,6 +356,8 @@ int IAvDream::minValue(state c, int alpha, int beta)
 			if (c.playerWiningPli == player || c.playerWiningPli == partner) 
 			{	
 				c.score += c.valuePli;
+				if(c.nbCarte == 1)
+					c.score += 10;
 				c.nbCarte--;
 				return minimax(c,alpha,beta);
 			}
@@ -525,7 +529,7 @@ Carte IAvDream::nextCarte(Hand h, int atout, int playerActive, int numberCardPla
 			bestCard.getColor() == atout && h.listHand[i].getColor() == atout && !hasAtoutSup && (h.hasColor(colorAsk) == false || colorAsk == atout) ||
 			h.hasColor(colorAsk)==false && h.hasColor(atout) == false)*/
 
-		if(isCarteValide(h, h.listHand[i], colorAsk, atout, bestCard))
+		if(isCarteValide(h, h.listHand[i], colorAsk, atout, bestCard,playerWining,playerActive))
 		{
 			c = majState(c, i);
 			if(c.playerHasHand == player ||c.playerHasHand == partner)
@@ -613,7 +617,7 @@ Carte IAvDream::nextCarte(Hand* htab, int atout, int playerActive, int numberCar
 			bestCard.getColor() == atout && h.listHand[i].getColor() == atout && !hasAtoutSup && (h.hasColor(colorAsk) == false || colorAsk == atout) ||
 			h.hasColor(colorAsk)==false && h.hasColor(atout) == false)*/
 		
-		if(isCarteValide(h, h.listHand[i], colorAsk, atout, bestCard))
+		if(isCarteValide(h, h.listHand[i], colorAsk, atout, bestCard,playerWining, playerActive))
 		{
 			c = majState(c, i);
 			if(c.playerHasHand == player ||c.playerHasHand == partner)
@@ -728,8 +732,9 @@ void IAvDream::delListCard(Carte cards[], int lg)
 }
 
 
-bool IAvDream::isCarteValide(Hand h, Carte c, int colorAsk, int atout, Carte bestCard)
+bool IAvDream::isCarteValide(Hand h, Carte c, int colorAsk, int atout, Carte bestCard,int winner, int actualPartner)
 {
+	actualPartner = (actualPartner + 2)%4;
 	bool valide = false;
 	if(colorAsk == -1)
 		valide = true;
@@ -740,9 +745,13 @@ bool IAvDream::isCarteValide(Hand h, Carte c, int colorAsk, int atout, Carte bes
 			valide = true;
 		//Si main ne contient pas couleur demandee, et ma carte est de l'atout
 		else if(h.hasColor(colorAsk) == false && c.getColor() == atout)
+		{
 			//Si bestCard n'est pas en atout ou si elle est d'ordre inférieur à la carte proposée
-			if(bestCard.getColor() != atout || c.getOrdre() > bestCard.getOrdre())
+			if(bestCard.getColor() != atout || c.getOrdre() > bestCard.getOrdre() || h.hasAtoutSup(bestCard.getOrdre(),atout) == false )
 				valide = true;
+			else if(winner == actualPartner)
+				valide = true;
+		}
 		//Autres cas à false par défaut
 	}
 	else
@@ -758,11 +767,11 @@ bool IAvDream::isCarteValide(Hand h, Carte c, int colorAsk, int atout, Carte bes
 	return valide;
 }
 
-Carte IAvDream::carteAuto(Hand h,int colorAsk,int atout, Carte bestCard)
+Carte IAvDream::carteAuto(Hand h,int colorAsk,int atout, Carte bestCard,int winner,int actualPlayer)
 {
 	for(int i = 0; i < h.nbCarte; i++)
 	{
-		if(isCarteValide(h,h.listHand[i],colorAsk,atout,bestCard))
+		if(isCarteValide(h,h.listHand[i],colorAsk,atout,bestCard,winner,actualPlayer))
 		{
 			return h.listHand[i];
 		}

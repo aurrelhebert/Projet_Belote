@@ -67,8 +67,8 @@ public:
 	void printGame(Hand htab[4]);
 
 	void delListCard(Carte c[], int lg);
-	bool isCarteValide(Hand h, Carte c, int colorAsk, int atout, Carte bestCard);
-	Carte carteAuto(Hand h,int colorAsk,int atout, Carte bestCard);
+	bool isCarteValide(Hand h, Carte c, int colorAsk, int atout, Carte bestCard, int winner, int actualPartner);
+	Carte carteAuto(Hand h,int colorAsk,int atout, Carte bestCard,int winner,int actualPlayer);
 	
 	IAvDream();
 	IAvDream(int nb);
