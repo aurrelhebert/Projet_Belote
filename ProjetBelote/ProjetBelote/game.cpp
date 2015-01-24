@@ -14,14 +14,52 @@ using namespace std;
 
 #define NBFORIA 20
 
-void playGame(Hand htab[4],IAvDream monIA)
+void setAtout(Carte tab[4][8], int atout)
+{
+	for(int i = 0; i < 4; i++)
+	{
+		for(int j = 0; j < 5; j++)
+		{
+			Carte tmp = tab[i][j];
+			if (tab[i][j].getColor() == atout)
+			{	
+				tab[i][j].setAtout();
+			}
+		}
+	}
+}
+
+int assetManagement(Carte tab[4][8], IAvDream monIA, int player, Carte firstCarte, int playerIA)
+{
+	Carte tabTmp [4][8];
+	Hand tabHand[4];
+	for (int i = 0; i<4; i++)
+		for(int j = 0; j <8; j++)
+			tabTmp[i][j] = tab[i][j];
+
+	setAtout(tabTmp, firstCarte.getColor());
+	for (int i=0; i<4; i++)
+	{
+		tabHand[i] = Hand(tabTmp[i],5);
+	}
+
+	bool prendre = monIA.prendre(tabHand[playerIA], firstCarte.getColor(), player, 0);
+	cout << prendre << endl;
+	if (prendre)
+	{
+		return firstCarte.getColor();
+	}
+	else 
+	{
+		return 1;
+	}
+}
+
+void playGame(Hand htab[4],IAvDream monIA, int player, int atoutGame)
 {	
-	int player, nbCardPlayed, carteJoue, colorPlay, winner, scorePli, scoreA, scoreB;
+	int nbCardPlayed, carteJoue, colorPlay, winner, scorePli, scoreA, scoreB;
 	winner = -1;
-	cout << "Belote : nouveau jeu" << endl;
-	cout << "Choisir le joueur qui commence la partie (0 - 3) : ";
-	cin >> player;
-	int atout = 1;
+	int atout = atoutGame;
 	scoreA = 0;
 	scoreB = 0;
 	Carte bCard;
@@ -186,7 +224,8 @@ void playGame(Hand htab[4],IAvDream monIA)
 						cout << "Joue quoi ? ";
 						cin >> carteJoue;
 						tmp=htab[player].listHand[carteJoue];
-
+						
+						cout << tmp << endl;
 						valide = monIA.isCarteValide(htab[player],tmp,colorPlay,atout,bCard,winner,player);
 					}
 				}
@@ -233,6 +272,8 @@ void playGame(Hand htab[4],IAvDream monIA)
 
 
 int main()  {
+	int atoutGame = 1;
+	int playerIA = 0;
 	//cout << "Affichage test" << endl;
 	//cout << setw(6) << "Huit" << setw(6) << "Coeur" << endl;
 	srand(time(NULL));
@@ -300,23 +341,21 @@ int main()  {
 			cartesRestantes.push_back(c);
 		}
 	}
-
+	
+	Carte tabCarte [4][8];
 	for(int i = 0; i < 4; i++)
 	{
 		Carte newHand[8];
-		for(int j = 0; j < 8; j++)
+		for(int j = 0; j < 5; j++)
 		{
 			int posCarte = rand() %cartesRestantes.size();
 			Carte tmp = cartesRestantes[posCarte];
-			if (tmp.getColor() == Carte::PIQUE)
-			{	
-				tmp.setAtout();
-			}
+			tabCarte[i][j]= tmp;
 			newHand[j] = tmp;
 			cartesRestantes.erase(cartesRestantes.begin() + posCarte);
 		}
-		tabHand[i] = Hand(newHand,8);
-		tabHand[i].triAtout(Carte::PIQUE);
+		tabHand[i] = Hand(newHand,5);
+		tabHand[i].triAtout(atoutGame);
 	}
 
 	
@@ -326,7 +365,52 @@ int main()  {
 	cout << "Retour de Carte : " << monIADream.nextCarte(tabHand[0], 1, 2, 0, Carte(), -1, 0) << endl;
 	cout << "Nb Coup : "<< monIADream.nbFin << endl;*/
 
-	playGame(tabHand,monIADream);
+	int player;
+	cout << "Belote : nouveau jeu" << endl;
+	cout << "Choisir le joueur qui commence la partie (0 - 3) : ";
+	cin >> player;
+	
+	monIADream.printGame(tabHand);
+
+	int posCarteForAtout = rand() %cartesRestantes.size();
+	Carte tmpForAtout = cartesRestantes[posCarteForAtout];
+	
+	cout << tmpForAtout << endl;
+
+	atoutGame = assetManagement(tabCarte, monIADream, player, tmpForAtout, playerIA);
+
+	cout << atoutGame << endl;
+
+	setAtout(tabCarte, atoutGame);
+	for(int i = 0; i < 4; i++)
+	{
+		Carte* newHand = tabCarte[i];
+		for(int j = 5; j < 8; j++)
+		{
+			Carte tmp;
+			int posCarte;
+			if (i == player && j == 5)
+			{
+				tmp = tmpForAtout;
+				posCarte = posCarteForAtout;
+			}
+			else 
+			{
+				posCarte = rand() %cartesRestantes.size();
+				tmp = cartesRestantes[posCarte];
+			}
+			if (tmp.getColor() == atoutGame)
+			{	
+				tmp.setAtout();
+			}
+			newHand[j] = tmp;
+			cartesRestantes.erase(cartesRestantes.begin() + posCarte);
+		}
+		tabHand[i] = Hand(newHand,8);
+		tabHand[i].triAtout(atoutGame);
+	}
+
+	playGame(tabHand,monIADream, player, atoutGame);
 	
 	while(1);
 	return 0;
