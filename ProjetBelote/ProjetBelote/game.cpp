@@ -29,21 +29,18 @@ void setAtout(Carte tab[4][8], int atout)
 	}
 }
 
-int assetManagement(Carte tab[4][8], IAvDream monIA, int player, Carte firstCarte, int playerIA)
+int assetManagementFirstTurn(Carte tab[4][8], IAvDream monIA, int player, Carte firstCarte, int playerIA)
 {
 	Carte tabTmp [4][8];
-	Hand tabHand[4];
+	Hand h;
 	for (int i = 0; i<4; i++)
 		for(int j = 0; j <8; j++)
 			tabTmp[i][j] = tab[i][j];
 
 	setAtout(tabTmp, firstCarte.getColor());
-	for (int i=0; i<4; i++)
-	{
-		tabHand[i] = Hand(tabTmp[i],5);
-	}
+	h = Hand(tab[player], 5);
 
-	bool prendre = monIA.prendre(tabHand[playerIA], firstCarte.getColor(), player, 0);
+	bool prendre = monIA.prendre(h, firstCarte.getColor(), player, playerIA);
 	cout << prendre << endl;
 	if (prendre)
 	{
@@ -51,8 +48,38 @@ int assetManagement(Carte tab[4][8], IAvDream monIA, int player, Carte firstCart
 	}
 	else 
 	{
-		return 1;
+		return -1;
 	}
+}
+
+int assetManagementSecondTurn(Carte tab[4][8], IAvDream monIA, int player, Carte firstCarte, int playerIA)
+{
+	int score = -1;
+	int atout = -1;
+	for (int i=0; i<4; i ++)
+	{
+		if (i != firstCarte.getColor())
+		{
+			Carte tabTmp [4][8];
+			Hand h;
+			for (int i = 0; i<4; i++)
+				for(int j = 0; j <8; j++)
+					tabTmp[i][j] = tab[i][j];
+
+			setAtout(tabTmp, firstCarte.getColor());
+			h = Hand(tab[player], 5);
+			
+			int prendre = monIA.atoutSecondTurn(h, i, player, playerIA);
+
+			cout << "i" << prendre << endl;
+			if (prendre > score)
+			{
+				score = prendre;
+				atout = i;
+			}
+		}
+	}
+	return atout;
 }
 
 void playGame(Hand htab[4],IAvDream monIA, int player, int atoutGame)
@@ -377,14 +404,36 @@ int main()  {
 	
 	cout << tmpForAtout << endl;
 
-	atoutGame = assetManagement(tabCarte, monIADream, player, tmpForAtout, playerIA);
+	atoutGame = assetManagementFirstTurn(tabCarte, monIADream, player, tmpForAtout, playerIA);
+	if (atoutGame == -1)
+	{
+		cout << "L'IA ne prend pas" << endl;
+		atoutGame = assetManagementSecondTurn(tabCarte, monIADream, player, tmpForAtout, playerIA);
+		//cout << atoutGame << endl;
+		if(atoutGame != -1)
+		{
+			cout << "IA prend au second Tour" << endl;
+		}
+	}
+	else 
+	{
+		cout << "IA prend au premier Tour" << endl;
+	}
+	
+	if (atoutGame == -1)
+	{
+		cout << "IA prend pas au second tour" << endl;
+		atoutGame = 1;
+	}
 
 	cout << atoutGame << endl;
 
 	setAtout(tabCarte, atoutGame);
 	for(int i = 0; i < 4; i++)
 	{
-		Carte* newHand = tabCarte[i];
+		Carte newHand [8];
+		for (int k = 0; k<5; k++)
+			newHand[k] = tabCarte[i][k];
 		for(int j = 5; j < 8; j++)
 		{
 			Carte tmp;
@@ -409,6 +458,9 @@ int main()  {
 		tabHand[i] = Hand(newHand,8);
 		tabHand[i].triAtout(atoutGame);
 	}
+
+	monIADream.printGame(tabHand);
+
 
 	playGame(tabHand,monIADream, player, atoutGame);
 	

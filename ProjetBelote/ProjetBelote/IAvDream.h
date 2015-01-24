@@ -70,6 +70,7 @@ public:
 	bool isCarteValide(Hand h, Carte c, int colorAsk, int atout, Carte bestCard, int winner, int actualPartner);
 	Carte carteAuto(Hand h,int colorAsk,int atout, Carte bestCard,int winner,int actualPlayer);
 	bool prendre(Hand h, int atout, int firstPlayer, int playerIA);
+	int atoutSecondTurn(Hand h, int atout, int firstPlayer, int playerIA);
 	
 	IAvDream();
 	IAvDream(int nb);
