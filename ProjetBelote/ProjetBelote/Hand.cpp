@@ -161,6 +161,8 @@ int Hand::nbColor(int c)
 		{
 			return nbTrefle;
 		}
+	default:
+		return -1;
 	}
 }
 
@@ -184,6 +186,8 @@ int Hand::posColor(int color)
 		{
 			return posTrefle;
 		}
+	default:
+		return -1;
 	}
 }
 
@@ -242,4 +246,11 @@ void Hand::triAtout(int color)
 bool Hand::hasAtoutSup(int ordre, int atout){
 	int pos = posColor(atout);
 	return (listHand[pos].getOrdre() > ordre);
+}
+
+void Hand::setAtout(int atout)
+{
+	for(int i = 0; i < nbCarte; i++)
+		if(listHand[i].getColor() == atout)
+			listHand[i].setAtout();
 }

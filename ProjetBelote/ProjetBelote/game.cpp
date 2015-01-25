@@ -16,7 +16,7 @@ using namespace std;
 
 void playGame(Hand htab[4],IAvDream monIA)
 {	
-	int player, nbCardPlayed, carteJoue, colorPlay, winner, scorePli, scoreA, scoreB;
+	int player, carteJoue, colorPlay, winner, scorePli, scoreA, scoreB;
 	winner = -1;
 	cout << "Belote : nouveau jeu" << endl;
 	cout << "Choisir le joueur qui commence la partie (0 - 3) : ";
@@ -25,6 +25,10 @@ void playGame(Hand htab[4],IAvDream monIA)
 	scoreA = 0;
 	scoreB = 0;
 	Carte bCard;
+
+	monIA.gestionPrise(htab, player,0);
+
+
 	for(int nbTour = 1; nbTour < 9; nbTour++)
 	{
 		if (nbTour==3)
@@ -56,7 +60,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 					srand(iForIa);
 					tabIa[iForIa] = IAvDream(monIA.nbTour);
 					resIa[iForIa] = tabIa[iForIa].nextCarte(htab[player],atout,player,0,Carte(),-1,0,winner);
-					//cout << iForIa << ": " << resIa[iForIa] << endl;
+					cout << iForIa << ": " << resIa[iForIa] << endl;
 				}
 				map<Carte, int> m;
 				
@@ -231,65 +235,8 @@ void playGame(Hand htab[4],IAvDream monIA)
 	cout << "Si vous lisez ce message, c'est que le jeu n'a pas plante :) " << endl;
 }
 
-
-int main()  {
-	//cout << "Affichage test" << endl;
-	//cout << setw(6) << "Huit" << setw(6) << "Coeur" << endl;
-	srand(time(NULL));
-
-	/*Paquet p = Paquet();
-	int point = 0;
-
-	Carte tas [8];
-	for(int i=0;i<8; i++)
-	{
-		Carte c = Carte(Carte::AS-i,Carte::PIQUE);
-		c.setAtout();
-		cout << c.getPoint() << endl;
-		tas[i]= c;
-	}
-	Hand h = Hand(tas, sizeof(tas)/sizeof(Carte));
-	h.triAtout(Carte::PIQUE);*/
-
-
-	IAvDream monIADream = IAvDream(6);
-	Hand tabHand[4];
-	//tabHand[0] = h;
-
-	/*Carte tas2 [8];
-	for(int i=0;i<8; i++)
-	{
-		Carte c = Carte(Carte::AS-i,Carte::CARREAU);
-		tas2[i]= c;
-	}
-	Hand h2 = Hand(tas2, sizeof(tas2)/sizeof(Carte));
-	h2.triAtout(Carte::PIQUE);
-	tabHand[1] = h2;
-
-	Carte tas3 [8];
-	for(int i=0;i<8; i++)
-	{
-		Carte c = Carte(Carte::AS-i,Carte::COEUR);
-		tas3[i]= c;
-	}
-	Hand h3 = Hand(tas3, sizeof(tas3)/sizeof(Carte));
-	h3.triAtout(Carte::PIQUE);
-	tabHand[2] = h3;
-
-	Carte tas4 [8];
-	for(int i=0;i<8; i++)
-	{
-		Carte c = Carte(Carte::AS-i,Carte::TREFLE);
-		tas4[i]= c;
-	}
-	Hand h4 = Hand(tas4, sizeof(tas4)/sizeof(Carte));
-	h4.triAtout(Carte::PIQUE);
-	tabHand[3] = h4;*/
-
-
-
-	//cout << monIADream.minimax(0, 1, tabHand) << endl;
-	
+void distribute8(Hand* tabHand)
+{
 	vector<Carte> cartesRestantes;
 
 	for(int i=0; i<4; i++)
@@ -308,23 +255,25 @@ int main()  {
 		{
 			int posCarte = rand() %cartesRestantes.size();
 			Carte tmp = cartesRestantes[posCarte];
-			if (tmp.getColor() == Carte::PIQUE)
+			/*if (tmp.getColor() == Carte::PIQUE)
 			{	
 				tmp.setAtout();
-			}
+			}*/
 			newHand[j] = tmp;
 			cartesRestantes.erase(cartesRestantes.begin() + posCarte);
 		}
 		tabHand[i] = Hand(newHand,8);
-		tabHand[i].triAtout(Carte::PIQUE);
+		//tabHand[i].triAtout(Carte::PIQUE);
 	}
+}
 
-	
-	/*cout << "Alpha Beta : " << monIADream.minimaxAlphaBeta(0, 1, tabHand) << endl;
-	cout << "Nb Coup : "<< monIADream.nbFin << endl;
 
-	cout << "Retour de Carte : " << monIADream.nextCarte(tabHand[0], 1, 2, 0, Carte(), -1, 0) << endl;
-	cout << "Nb Coup : "<< monIADream.nbFin << endl;*/
+int main()  {
+	srand(time(NULL));
+
+	IAvDream monIADream = IAvDream(6);
+	Hand tabHand[4];
+	distribute8(tabHand);
 
 	playGame(tabHand,monIADream);
 	

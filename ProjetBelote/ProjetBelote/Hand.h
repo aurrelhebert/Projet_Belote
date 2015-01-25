@@ -92,6 +92,9 @@ public:
 	*/
 	void triAtout(int color);
 
+
+	void setAtout(int atout);
+
 private:
 	/**
 	Function used to sort the array of the hand
