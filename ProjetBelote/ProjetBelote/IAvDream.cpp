@@ -41,7 +41,7 @@ int IAvDream::minimax(int firstPlayer, int atout, Hand * all)
 	c.playerWiningPli = firstPlayer;
 	c.atout = atout;
 	c.score = 0;
-	c.nbCarte = all[firstPlayer].nbCarte;
+	c.nbCarte = 8;
 	c.valuePli = 0;
 	for(int i=0;i<4;i++)
 		c.allHand[i] = all[i];
@@ -229,7 +229,7 @@ int IAvDream::minimaxAlphaBeta(int firstPlayer, int atout, Hand * all)
 	c.playerWiningPli = firstPlayer;
 	c.atout = atout;
 	c.score = 0;
-	c.nbCarte = all[firstPlayer].nbCarte;
+	c.nbCarte = 8;
 	c.valuePli = 0;
 	for(int i=0;i<4;i++)
 		c.allHand[i] = all[i];
@@ -494,8 +494,8 @@ Carte IAvDream::nextCarte(Hand h, int atout, int playerActive, int numberCardPla
 	Hand htab[4];
 
 	distributionCards(h, htab, atout);
-	player=playerActive;
-	partner=(playerActive+2)%4;
+	player=playerWining;
+	partner=(playerWining+2)%4;
 	//printGame(htab);
 	int max = -1;
 	int index = 0;
@@ -645,22 +645,6 @@ Carte IAvDream::nextCarte(Hand* htab, int atout, int playerActive, int numberCar
 	//cout << "Score : " << max << endl;
 	//cout << player << partner <<endl;
 	return h.listHand[index];
-}
-
-bool IAvDream::prendre(Hand h, int atout, int firstPlayer, int playerIA)
-{
-	Hand htab[4];
-
-	distributionCards(h, htab, atout);
-	
-	player=playerIA;
-	partner=(playerIA+2)%4;
-
-	int score = minimaxAlphaBeta(firstPlayer, atout, htab);
-	if (score > 82)
-		return true;
-	else 
-		return false;
 }
 
 void IAvDream::deleteCard(Carte c)
