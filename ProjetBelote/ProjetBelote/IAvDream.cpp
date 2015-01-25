@@ -824,7 +824,7 @@ void IAvDream::distributionPrise(Hand h, Hand* htab,int atout)
 	}
 	for(int i = 0; i < 4; i++)
 	{
-		Carte newHand[8];
+		Carte newHand[9];
 		if(i == 0) //TODO change playerIA
 		{
 			for(int k = 0; k < h.nbCarte; k++)

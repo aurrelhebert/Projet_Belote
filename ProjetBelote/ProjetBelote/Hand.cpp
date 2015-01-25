@@ -54,14 +54,7 @@ Hand::Hand(Carte* c, int nb)
 			j++;
 			i++;
 		}
-		if (c[i].getColor()>3 || c[i].getColor()<0)
-		{
-			i++;
-			//cout << "Une carte n'est pas initialisée" << endl;
-		}
 	}
-	
-	//cout << "Je suis la 06" << endl;
 }
 
 
