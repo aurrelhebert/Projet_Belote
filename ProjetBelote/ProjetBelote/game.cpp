@@ -12,12 +12,17 @@
 
 using namespace std;
 
-#define NBFORIA 10
+#define NBFORIA 15
 
 void printAtout(int atout)
 {
 	switch(atout)
 	{
+	case -1:
+		{
+			cout << "Ne prend pas" << endl;
+			break;
+		}
 	case 0:
 		{
 			cout << "Coeur" << endl;
@@ -53,8 +58,8 @@ void gestionPrise(Hand* tabHand,int firstPlayer, int playerIA,IAvDream monIA)
 		srand(iForIa);
 		tabIa[iForIa] = IAvDream(monIA.nbTour);
 		resIa[iForIa] = tabIa[iForIa].prendre(tabHand[playerIA], firstPlayer, playerIA);
-		cout << iForIa << ": ";
-		printAtout(resIa[iForIa]);
+		/*cout << iForIa << ": ";
+		printAtout(resIa[iForIa]);*/
 	}
 	map<int, int> m;
 
@@ -141,7 +146,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 					srand(iForIa);
 					tabIa[iForIa] = IAvDream(monIA.nbTour);
 					resIa[iForIa] = tabIa[iForIa].nextCarte(htab[player],atout,player,0,Carte(),-1,0,winner);
-					cout << iForIa << ": " << resIa[iForIa] << endl;
+					//cout << iForIa << ": " << resIa[iForIa] << endl;
 				}
 				map<Carte, int> m;
 

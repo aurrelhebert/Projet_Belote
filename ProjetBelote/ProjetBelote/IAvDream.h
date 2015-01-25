@@ -72,7 +72,6 @@ public:
 
 	int prendre(Hand h,int firstPlayer, int playerIA);
 	int prendreScore(Hand h, int atout, int firstPlayer, int playerIA);
-	//void gestionPrise(Hand* tabHand,int firstPlayer, int playerIA);
 	void distributionPrise(Hand h, Hand* htab,int atout);
 	
 	IAvDream();

@@ -788,7 +788,7 @@ int IAvDream::prendreScore(Hand h, int atout, int firstPlayer, int playerIA)
 	partner=(playerIA+2)%4;
 
 	int score = minimaxAlphaBeta(firstPlayer, atout,htab);
-	if (score > 82)
+	if (score > 130)
 		return score;
 	else 
 		return -1;
@@ -847,20 +847,3 @@ void IAvDream::distributionPrise(Hand h, Hand* htab,int atout)
 		htab[i].triAtout(atout);
 	}
 }
-
-/*void IAvDream::gestionPrise(Hand* tabHand,int firstPlayer, int playerIA)
-{
-	int atout = 1;
-	
-	int atoutPris = prendre(tabHand[playerIA], firstPlayer, playerIA);
-	cout << "Atout pris = " << atoutPris << endl;
-	if(atoutPris != -1)
-		atout = atoutPris;
-	else
-		cout << "Atout par defaut : pique" << endl;
-	for(int i = 0; i < 4; i++)
-	{
-		tabHand[i].setAtout(atout);
-		tabHand[i].triAtout(atout);
-	}
-}*/
