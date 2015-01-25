@@ -663,22 +663,6 @@ bool IAvDream::prendre(Hand h, int atout, int firstPlayer, int playerIA)
 		return false;
 }
 
-int IAvDream::atoutSecondTurn(Hand h, int atout, int firstPlayer, int playerIA)
-{
-	Hand htab[4];
-
-	distributionCards(h, htab, atout);
-	
-	player=playerIA;
-	partner=(playerIA+2)%4;
-
-	int score = minimaxAlphaBeta(firstPlayer, atout, htab);
-	if (score > 82)
-		return score;
-	else 
-		return -1;
-}
-
 void IAvDream::deleteCard(Carte c)
 {
 	int pos = c.getColor()*8 + c.getValue();
