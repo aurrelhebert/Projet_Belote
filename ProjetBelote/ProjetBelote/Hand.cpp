@@ -15,7 +15,7 @@ Hand::Hand(Carte* c, int nb)
 	int i=0;
 	//TODO TRI tab c;
 	triABulle(c,nb);
-	
+
 	while(i<nbCarte)
 	{
 		while (c[i].getColor()== Carte::COEUR)
@@ -25,7 +25,6 @@ Hand::Hand(Carte* c, int nb)
 			j++;
 			i++;
 		}
-		
 		posPique = j;
 
 		while (c[i].getColor()== Carte::PIQUE)
@@ -35,7 +34,7 @@ Hand::Hand(Carte* c, int nb)
 			j++;
 			i++;
 		}
-
+		
 		posCarreau = j;
 
 		while (c[i].getColor()== Carte::CARREAU)
@@ -45,7 +44,7 @@ Hand::Hand(Carte* c, int nb)
 			j++;
 			i++;
 		}
-
+		
 		posTrefle = j;
 
 		while (c[i].getColor()== Carte::TREFLE)
@@ -55,8 +54,14 @@ Hand::Hand(Carte* c, int nb)
 			j++;
 			i++;
 		}
+		if (c[i].getColor()>3 || c[i].getColor()<0)
+		{
+			i++;
+			//cout << "Une carte n'est pas initialisée" << endl;
+		}
 	}
-
+	
+	//cout << "Je suis la 06" << endl;
 }
 
 
@@ -224,12 +229,13 @@ void Hand::triAtout(int color)
    int i;
    bool permutation;
    int pos = posColor(color);
-   int longueur = (pos + nbColor(color) - 1);
+   int longueur = (pos + nbColor(color)-1);
    do
    {
       permutation = false;
       for(i= pos; i<longueur; i++)
       {
+		  //cout << " I : " << i <<endl;
 		  if(listHand[i].getOrdre()<listHand[i+1].getOrdre())
          {
 			Carte tmp = listHand[i];
