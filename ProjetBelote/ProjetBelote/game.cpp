@@ -12,7 +12,89 @@
 
 using namespace std;
 
-#define NBFORIA 20
+#define NBFORIA 10
+
+void printAtout(int atout)
+{
+	switch(atout)
+	{
+	case 0:
+		{
+			cout << "Coeur" << endl;
+			break;
+		}
+	case 1:
+		{
+			cout << "Pique" << endl;
+			break;
+		}
+	case 2:
+		{
+			cout << "Carreau" << endl;
+			break;
+		}
+	case 3:
+		{
+			cout << "Trefle" << endl;
+			break;
+		}
+	}
+}
+
+void gestionPrise(Hand* tabHand,int firstPlayer, int playerIA,IAvDream monIA)
+{
+	int atout = 1;
+
+	int resIa[NBFORIA];
+	IAvDream tabIa[NBFORIA];
+#pragma omp parallel for
+	for (int iForIa = 0; iForIa <NBFORIA; iForIa++)
+	{
+		srand(iForIa);
+		tabIa[iForIa] = IAvDream(monIA.nbTour);
+		resIa[iForIa] = tabIa[iForIa].prendre(tabHand[playerIA], firstPlayer, playerIA);
+		cout << iForIa << ": ";
+		printAtout(resIa[iForIa]);
+	}
+	map<int, int> m;
+
+	for (int iForIa = 0; iForIa <NBFORIA; iForIa++)
+	{
+		int tmp = resIa[iForIa];
+		if(m.find(tmp).operator==(m.end()))
+		{
+			m[tmp]=0;
+		} 
+		m[tmp]++;
+	}
+	int max = -1;
+	int tmpForIa;
+	for (std::map<int, int>::iterator it = m.begin(); it != m.end(); ++it)
+	{
+		//cout << it->first << it->second <<endl;
+		if (it->second > max)
+		{
+			tmpForIa = it->first;
+			max = it->second;
+		}
+	}
+
+	int atoutPris = tmpForIa;
+	
+	if(atoutPris != -1)
+	{
+		atout = atoutPris;
+		cout << "Atout pris par l'IA = ";
+		printAtout(atoutPris);
+	}
+	else
+		cout << "Atout par defaut : pique" << endl;
+	for(int i = 0; i < 4; i++)
+	{
+		tabHand[i].setAtout(atout);
+		tabHand[i].triAtout(atout);
+	}
+}
 
 void playGame(Hand htab[4],IAvDream monIA)
 {	
@@ -26,8 +108,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 	scoreB = 0;
 	Carte bCard;
 
-	monIA.gestionPrise(htab, player,0);
-
+	gestionPrise(htab, player,0, monIA);
 
 	for(int nbTour = 1; nbTour < 9; nbTour++)
 	{
@@ -43,7 +124,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 		Carte c [4];
 		scorePli = 0;
 		bool valide;
-		
+
 		for (int i=0; i <4; i++)
 		{	
 			valide = false;
@@ -63,7 +144,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 					cout << iForIa << ": " << resIa[iForIa] << endl;
 				}
 				map<Carte, int> m;
-				
+
 				for (int iForIa = 0; iForIa <NBFORIA; iForIa++)
 				{
 					Carte tmp = resIa[iForIa];
@@ -136,7 +217,7 @@ void playGame(Hand htab[4],IAvDream monIA)
 					//cout << iForIa << ": " << resIa[iForIa] << endl;
 				}
 				map<Carte, int> m;
-				
+
 				for (int iForIa = 0; iForIa <NBFORIA; iForIa++)
 				{
 					Carte tmp = resIa[iForIa];
@@ -257,7 +338,7 @@ void distribute8(Hand* tabHand)
 			Carte tmp = cartesRestantes[posCarte];
 			/*if (tmp.getColor() == Carte::PIQUE)
 			{	
-				tmp.setAtout();
+			tmp.setAtout();
 			}*/
 			newHand[j] = tmp;
 			cartesRestantes.erase(cartesRestantes.begin() + posCarte);
@@ -268,6 +349,8 @@ void distribute8(Hand* tabHand)
 }
 
 
+
+
 int main()  {
 	srand(time(NULL));
 
@@ -276,7 +359,7 @@ int main()  {
 	distribute8(tabHand);
 
 	playGame(tabHand,monIADream);
-	
+
 	while(1);
 	return 0;
 }

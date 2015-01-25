@@ -233,7 +233,7 @@ void Hand::triAtout(int color)
    do
    {
       permutation = false;
-      for(i= pos; i<longueur; i++)
+      for(i= pos; i<longueur && longueur > 0; i++)
       {
 		  //cout << " I : " << i <<endl;
 		  if(listHand[i].getOrdre()<listHand[i+1].getOrdre())

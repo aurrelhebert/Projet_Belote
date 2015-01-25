@@ -848,7 +848,7 @@ void IAvDream::distributionPrise(Hand h, Hand* htab,int atout)
 	}
 }
 
-void IAvDream::gestionPrise(Hand* tabHand,int firstPlayer, int playerIA)
+/*void IAvDream::gestionPrise(Hand* tabHand,int firstPlayer, int playerIA)
 {
 	int atout = 1;
 	
@@ -863,4 +863,4 @@ void IAvDream::gestionPrise(Hand* tabHand,int firstPlayer, int playerIA)
 		tabHand[i].setAtout(atout);
 		tabHand[i].triAtout(atout);
 	}
-}
+}*/
