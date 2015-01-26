@@ -653,7 +653,7 @@ void IAvDream::distributionCards(Hand h, Hand htab[4], int atout)
 	
 	for(int i = 1; i < 4; i++)
 	{
-		Carte newHand[8];
+		Carte newHand[9];
 		for(int j = 0; j < h.nbCarte; j++)
 		{ 
 			int posCarte = rand() %listeRestante.size();

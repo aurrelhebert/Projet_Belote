@@ -46,7 +46,7 @@ void printAtout(int atout)
 	}
 }
 
-void gestionPrise(Hand* tabHand,int firstPlayer, int playerIA,IAvDream monIA)
+int gestionPrise(Hand* tabHand,int firstPlayer, int playerIA,IAvDream monIA)
 {
 	int atout = 1;
 
@@ -99,6 +99,7 @@ void gestionPrise(Hand* tabHand,int firstPlayer, int playerIA,IAvDream monIA)
 		tabHand[i].setAtout(atout);
 		tabHand[i].triAtout(atout);
 	}
+	return atout;
 }
 
 void playGame(Hand htab[4],IAvDream monIA)
@@ -108,12 +109,10 @@ void playGame(Hand htab[4],IAvDream monIA)
 	cout << "Belote : nouveau jeu" << endl;
 	cout << "Choisir le joueur qui commence la partie (0 - 3) : ";
 	cin >> player;
-	int atout = 1;
+	int atout = gestionPrise(htab, player,0, monIA);
 	scoreA = 0;
 	scoreB = 0;
 	Carte bCard;
-
-	gestionPrise(htab, player,0, monIA);
 
 	for(int nbTour = 1; nbTour < 9; nbTour++)
 	{
