@@ -7,6 +7,13 @@
 #include <algorithm>
 
 using namespace std;
+/**
+* @class IA
+* @brief DO NOT USE
+* First version of IA,do not work. 
+* @author ahebert
+* @author edauchard
+**/
 
 class IA
 {

@@ -28,31 +28,31 @@ public:
 	int nbTrefle; /**< number of card of type "Trefle" */
 
 	/**
-	Simple empty constructeur.
-	@return new Hand.
+	Simple empty constructeur
+	@return new Hand
 	@warning do not used
 	*/
 	Hand();
 	/**
-	Simple constructeur, the array will be classified by the color.
+	Simple constructeur, the array will be classified by the color
  
-	@param[in]     c Array of card.
-	@param[in]     nb number of card in the hand.
-	@return a correct Hand.
+	@param[in]     c Array of card
+	@param[in]     nb number of card in the hand
+	@return a correct Hand
 	*/
 	Hand(Carte*, int);
 
 	/**
-	Function used to destroy a card, using the index (the position of the card) given in param. Rebuilt the hand without this card.
+	Function used to destroy a card, using the index (the position of the card) given in param. Rebuilt the hand without this card
  
-	@param[in]     index position of the card we want to delete.
+	@param[in]     index position of the card we want to delete
 	*/
 	void deleteCarte(int index);
 
 	/**
-	Delete the card given in parameter from the hand.
+	Delete the card given in parameter from the hand
  
-	@param[in]     c the card we want to delete.
+	@param[in]     c the card we want to delete
 	*/
 	void deleteCarte(Carte c);
 	~Hand(void);
@@ -65,22 +65,22 @@ public:
 	int posColor(int color);
 
 	/**
-	Test a hand to know if it possessed a given color.
-	@param[in] c the color we want to know if it belong to the hand.
+	Test a hand to know if it possessed a given color
+	@param[in] c the color we want to know if it belong to the hand
 	@return boolean yes if this hand has the color
 	*/
 	bool hasColor(int c);
 
 	/**
-	Test a hand to know if it possessed a better asset than the best one in game.
-	@param[in] ordre the order of the best asset in game.
+	Test a hand to know if it possessed a better asset than the best one in game
+	@param[in] ordre the order of the best asset in game
 	@return boolean yes if this hand has a bette asset
 	*/
 	bool hasAtoutSup(int ordre, int atout);
 
 	/**
 	Getter used to get the number of card of a given color in the hand
-	@param[in] c the color we want to access.
+	@param[in] c the color we want to access
 	@return number of card from this color in the hand
 	*/
 	int Hand::nbColor(int c);

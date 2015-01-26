@@ -5,6 +5,13 @@
 #include <iostream>
 #include "carte.h"
 
+/**
+* @class Paquet
+* @brief DO NOT USE
+* Class resuming the 32 card of a game, not used in our current IA.
+* @author ahebert
+* @author edauchard
+**/
 class Paquet{
 
 public:
